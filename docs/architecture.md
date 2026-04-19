@@ -16,7 +16,7 @@ flowchart TD
 
     subgraph Config ["harness/config.py  —  Central Configuration"]
         LangMap["TOP_20_LANGUAGES\n────────────────\nlanguage name ↔\nFLORES-200 code"]
-        ModelMap["MODELS\n────────────────\nclaude → claude-opus-4-7\nopenai → gpt-5.4\ngemini → gemini-3.1-pro"]
+        ModelMap["MODELS\n────────────────\nclaude → claude-sonnet-4-6\nopenai → gpt-5.4-mini\ngemini → gemini-3.1-flash-lite-preview"]
         BenchCfg["BENCHMARK_CONFIGS\n────────────────\nmax_examples_per_language\ndataset ID"]
     end
 

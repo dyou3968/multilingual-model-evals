@@ -35,7 +35,6 @@ class OpenAIClient(BaseClient):
         response = await self._client.chat.completions.create(
             model=self.model_id,
             messages=messages,
-            max_tokens=max_tokens,
-            temperature=temperature,
+            max_completion_tokens=max_tokens,
         )
         return response.choices[0].message.content.strip()

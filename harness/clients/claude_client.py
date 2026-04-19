@@ -39,4 +39,6 @@ class ClaudeClient(BaseClient):
             kwargs["system"] = system
 
         response = await self._client.messages.create(**kwargs)
+        if not response.content:
+            return ""
         return response.content[0].text.strip()
