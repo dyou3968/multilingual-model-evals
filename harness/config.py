@@ -6,15 +6,15 @@ load_dotenv()
 # ── Model IDs ────────────────────────────────────────────────────────────────
 
 MODELS = {
-    "claude": os.getenv("CLAUDE_MODEL", "claude-opus-4-7"),
-    "openai": os.getenv("OPENAI_MODEL", "gpt-5.4"),
-    "gemini": os.getenv("GEMINI_MODEL", "gemini-3.1-pro"),
+    "claude": os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6"),
+    "openai": os.getenv("OPENAI_MODEL", "gpt-5.4-mini"),
+    "gemini": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite-preview"),
 }
 
 MODEL_DISPLAY = {
-    "claude": "Claude Opus 4.7",
-    "openai": "GPT-5.4",
-    "gemini": "Gemini 3.1 Pro",
+    "claude": "Claude Sonnet 4.6",
+    "openai": "GPT-5.4 Mini",
+    "gemini": "Gemini 3.1 Flash-Lite Preview",
 }
 
 # ── Top-20 Languages ─────────────────────────────────────────────────────────

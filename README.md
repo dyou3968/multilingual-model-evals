@@ -1,6 +1,16 @@
 # Multilingual Model Evaluations
 
-A benchmarking harness comparing **Claude Opus 4.7**, **GPT-5.4**, and **Gemini 3.1 Pro** across the top 20 global speaker languages using the [Belebele](https://huggingface.co/datasets/facebook/belebele) reading comprehension benchmark.
+A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **Gemini 3.1 Flash-Lite Preview** across the top 20 global speaker languages using the [Belebele](https://huggingface.co/datasets/facebook/belebele) reading comprehension benchmark.
+
+## Models
+
+| Key | Model | MMMLU |
+|-----|-------|-------|
+| `claude` | Claude Sonnet 4.6 | 89.3% |
+| `openai` | GPT-5.4 Mini | — |
+| `gemini` | Gemini 3.1 Flash-Lite Preview | 88.9% |
+
+These are mid-tier models positioned for cost-efficient multilingual evaluation. All three are overridable via `.env`.
 
 ## Project Structure
 
@@ -17,13 +27,16 @@ multilingual-model-evals/
 │   ├── clients/
 │   │   ├── base.py
 │   │   ├── claude_client.py
-│   │   ├── openai_client.py
+│   │   └── openai_client.py
 │   │   └── gemini_client.py
 │   └── benchmarks/
 │       ├── base.py
 │       └── belebele.py          # Reading comprehension MCQ
 ├── docs/
 │   └── architecture.md          # System architecture diagram
+├── results/
+│   ├── belebele/                # Active run outputs (JSONL per model)
+│   └── archive/                 # Previous experimental runs
 ├── benchmarks/
 │   ├── existing/                # Phase 2 benchmark audit
 │   └── gap_analysis/            # Phase 3 gap analysis
@@ -67,12 +80,12 @@ OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=...
 ```
 
-The model IDs default to `claude-opus-4-7`, `gpt-5.4`, and `gemini-3.1-pro`. Override them in `.env` if needed (e.g. to point at a different model version during testing):
+Model IDs default to the values below. Override in `.env` to point at a different version:
 
 ```
-CLAUDE_MODEL=claude-opus-4-7
-OPENAI_MODEL=gpt-5.4
-GEMINI_MODEL=gemini-3.1-pro
+CLAUDE_MODEL=claude-sonnet-4-6
+OPENAI_MODEL=gpt-5.4-mini
+GEMINI_MODEL=gemini-3.1-flash-lite-preview
 ```
 
 ### 3. Verify setup (optional smoke test)
@@ -93,21 +106,19 @@ You should see a progress bar and a new file at `results/belebele/claude.jsonl`.
 python run_eval.py
 ```
 
-Estimated cost: **~$227** across all three models. See [Cost Estimates](#cost-estimates) below.
-
 ### Specific models
 
 ```bash
-python run_eval.py --models claude openai
+python run_eval.py --models claude --models openai
 ```
 
 Model key → model ID mapping (set in `harness/config.py` and overridable via `.env`):
 
 | Key | Default model |
 |-----|---------------|
-| `claude` | claude-opus-4-7 |
-| `openai` | gpt-5.4 |
-| `gemini` | gemini-3.1-pro |
+| `claude` | claude-sonnet-4-6 |
+| `openai` | gpt-5.4-mini |
+| `gemini` | gemini-3.1-flash-lite-preview |
 
 ### Specific languages
 
@@ -172,17 +183,12 @@ Rough estimates at current API pricing (April 2026):
 
 | Model | Input (~7.2M tokens) | Output (~90K tokens) | Total |
 |-------|---------------------|---------------------|-------|
-| Claude Opus 4.7 | ~$108 | ~$7 | **~$115** |
-| GPT-5.4 | ~$72 | ~$3 | **~$75** |
-| Gemini 3.1 Pro | ~$36 | ~$1 | **~$37** |
-| **All 3 models** | | | **~$227** |
+| Claude Sonnet 4.6 | ~$21.6 | ~$1.4 | **~$23** |
+| GPT-5.4 Mini | ~$5.4 | ~$0.4 | **~$6** |
+| Gemini 3.1 Flash-Lite Preview | ~$0.7 | ~$0.1 | **~$1** |
+| **All 3 models** | | | **~$30** |
 
 No judge pass is needed — Belebele is fully automated exact-match scoring.
-
-To reduce costs further during development:
-- Lower `max_examples_per_language` in `harness/config.py`
-- Run `--models claude` only first to validate correctness
-- Use `--languages` to target a small subset before scaling up
 
 ## Architecture
 
@@ -205,10 +211,10 @@ run_eval.py
 
 This project spans four phases:
 
-- **Phase 1** — Literature review of Claude Opus 4.7, GPT-5.4, and Gemini 3.1 Pro multilingual capabilities
+- **Phase 1** — Literature review of multilingual capabilities across frontier models
 - **Phase 2** — Audit of 24 existing multilingual benchmarks with coverage matrix
 - **Phase 3** — Gap analysis identifying 8 under-covered areas (low-resource languages, SEA, contamination risk, etc.)
-- **Phase 4** — This harness: running Belebele across all three models and 20 languages
+- **Phase 4** — This harness: running Belebele across Claude Sonnet 4.6, GPT-5.4 Mini, and Gemini 3.1 Flash-Lite Preview across 20 languages
 
 See the `literature/`, `benchmarks/existing/`, and `benchmarks/gap_analysis/` directories for Phase 1–3 documents.
 
