@@ -9,8 +9,9 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **
 | `claude` | Claude Sonnet 4.6 | 89.3% |
 | `openai` | GPT-5.4 Mini | — |
 | `gemini` | Gemini 3.1 Flash-Lite Preview | 88.9% |
+| `gemini_flash` | Gemini 3.1 Flash Preview | — |
 
-These are mid-tier models positioned for cost-efficient multilingual evaluation. All three are overridable via `.env`.
+`claude`, `openai`, and `gemini` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
 
 ## Project Structure
 
@@ -27,15 +28,19 @@ multilingual-model-evals/
 │   ├── clients/
 │   │   ├── base.py
 │   │   ├── claude_client.py
-│   │   └── openai_client.py
+│   │   ├── openai_client.py
 │   │   └── gemini_client.py
 │   └── benchmarks/
 │       ├── base.py
-│       └── belebele.py          # Reading comprehension MCQ
+│       ├── belebele.py          # Reading comprehension MCQ (20 languages)
+│       ├── global_mmlu.py       # Knowledge MCQ — CohereLabs (16 languages)
+│       └── milu.py              # Knowledge MCQ — Indic languages (7 languages, gated)
 ├── docs/
 │   └── architecture.md          # System architecture diagram
 ├── results/
 │   ├── belebele/                # Active run outputs (JSONL per model)
+│   ├── global_mmlu/             # Global MMLU outputs
+│   ├── milu/                    # MILU outputs
 │   └── archive/                 # Previous experimental runs
 ├── benchmarks/
 │   ├── existing/                # Phase 2 benchmark audit
@@ -43,17 +48,53 @@ multilingual-model-evals/
 └── literature/                  # Phase 1 literature review
 ```
 
-## Benchmark
+## Benchmarks
 
-| Benchmark | Task | Languages | Scoring |
-|-----------|------|-----------|---------|
-| [Belebele](https://huggingface.co/datasets/facebook/belebele) | Reading comprehension MCQ | 20 | Exact match |
+| Benchmark | Task | Languages | Examples/lang | Scoring | Auth |
+|-----------|------|-----------|---------------|---------|------|
+| [Belebele](https://huggingface.co/datasets/facebook/belebele) | Reading comprehension MCQ | 20/20 | 900 (full set) | Exact match | Public |
+| [Global MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU) | Knowledge MCQ (57 subjects) | 16/20 | 1,000 (capped) | Exact match | Public |
+| [MILU](https://huggingface.co/datasets/ai4bharat/MILU) | Knowledge MCQ — Indic languages | 7/20 | 1,000 (capped) | Exact match | Gated¹ |
 
-Belebele presents a passage and four multiple-choice answers per question. Models respond with a single letter (A–D). No judge pass is needed — scoring is fully automated, making it the cleanest and most cost-efficient benchmark to run at scale.
+**Language coverage gaps:**
+- Global MMLU does not cover: Punjabi, Marathi, Telugu, Tamil
+- MILU covers only Indic languages: English, Hindi, Bengali, Punjabi, Marathi, Telugu, Tamil
+
+¹ MILU requires accepting terms at huggingface.co/datasets/ai4bharat/MILU and setting `HF_TOKEN` in `.env`.
+
+All three benchmarks use MCQ exact-match scoring — no judge pass needed.
 
 ## Target Languages
 
 Top 20 by global speakers: Mandarin Chinese, Spanish, English, Hindi, Arabic, Bengali, Portuguese, Russian, Japanese, Punjabi, Marathi, Telugu, Turkish, Tamil, Vietnamese, Korean, French, German, Urdu, Indonesian.
+
+## Running Experiments
+
+### Full run (all models, all benchmarks)
+
+```bash
+python run_eval.py                                      # belebele, all 3 primary models
+python run_eval.py --benchmarks global_mmlu milu        # new benchmarks, all models
+python run_eval.py --models gemini_flash --benchmarks global_mmlu milu  # flash comparison
+```
+
+### Benchmark-specific
+
+```bash
+python run_eval.py --benchmarks belebele
+python run_eval.py --benchmarks global_mmlu
+python run_eval.py --benchmarks milu                    # requires HF_TOKEN
+```
+
+### Model-specific
+
+```bash
+python run_eval.py --models gemini
+python run_eval.py --models gemini_flash
+python run_eval.py --models claude --models openai
+```
+
+---
 
 ## Setup
 
@@ -77,7 +118,12 @@ Open `.env` and fill in your keys:
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
-GOOGLE_API_KEY=...
+GOOGLE_API_KEY=...          # used for both gemini and gemini_flash
+
+# Required only for MILU (gated dataset):
+# 1. Accept terms at https://huggingface.co/datasets/ai4bharat/MILU
+# 2. Generate a token at https://huggingface.co/settings/tokens
+HF_TOKEN=hf_...
 ```
 
 Model IDs default to the values below. Override in `.env` to point at a different version:
@@ -86,6 +132,7 @@ Model IDs default to the values below. Override in `.env` to point at a differen
 CLAUDE_MODEL=claude-sonnet-4-6
 OPENAI_MODEL=gpt-5.4-mini
 GEMINI_MODEL=gemini-3.1-flash-lite-preview
+GEMINI_FLASH_MODEL=gemini-3.1-flash-preview
 ```
 
 ### 3. Verify setup (optional smoke test)
@@ -98,37 +145,11 @@ python run_eval.py --models claude --languages zho_Hans
 
 You should see a progress bar and a new file at `results/belebele/claude.jsonl`.
 
-## Running Experiments
-
-### Full run (all models, all 20 languages)
-
-```bash
-python run_eval.py
-```
-
-### Specific models
-
-```bash
-python run_eval.py --models claude --models openai
-```
-
-Model key → model ID mapping (set in `harness/config.py` and overridable via `.env`):
-
-| Key | Default model |
-|-----|---------------|
-| `claude` | claude-sonnet-4-6 |
-| `openai` | gpt-5.4-mini |
-| `gemini` | gemini-3.1-flash-lite-preview |
-
-### Specific languages
-
-Belebele uses FLORES-200 language codes:
+### Specific languages (Belebele FLORES-200 codes)
 
 ```bash
 python run_eval.py --languages zho_Hans hin_Deva arb_Arab
 ```
-
-All 20 target language codes:
 
 | Language | Code | Language | Code |
 |----------|------|----------|------|
@@ -143,16 +164,10 @@ All 20 target language codes:
 | Japanese | `jpn_Jpan` | German | `deu_Latn` |
 | Urdu | `urd_Arab` | Indonesian | `ind_Latn` |
 
-### Custom output directory
+### Custom output directory / verbose logging
 
 ```bash
-python run_eval.py --results-dir /path/to/output
-```
-
-### Verbose logging
-
-```bash
-python run_eval.py --verbose
+python run_eval.py --results-dir /path/to/output --verbose
 ```
 
 ## Resumability
@@ -177,9 +192,9 @@ Results are written as append-only JSONL files at `results/belebele/<model>.json
 
 ## Cost Estimates
 
-Belebele has 900 fixed examples per language × 20 languages = 18,000 total examples. MCQ outputs are a single letter so output tokens are minimal.
+All three benchmarks use MCQ exact-match scoring — no judge pass needed. MCQ outputs are a single letter so output tokens are minimal.
 
-Rough estimates at current API pricing (April 2026):
+**Belebele** — 900 examples × 20 languages = 18,000 examples per model:
 
 | Model | Input (~7.2M tokens) | Output (~90K tokens) | Total |
 |-------|---------------------|---------------------|-------|
@@ -188,7 +203,11 @@ Rough estimates at current API pricing (April 2026):
 | Gemini 3.1 Flash-Lite Preview | ~$0.7 | ~$0.1 | **~$1** |
 | **All 3 models** | | | **~$30** |
 
-No judge pass is needed — Belebele is fully automated exact-match scoring.
+**Global MMLU** — 1,000 examples × 16 languages = 16,000 examples per model (similar token cost to Belebele, ~10% less volume).
+
+**MILU** — 1,000 examples × 7 languages = 7,000 examples per model (~40% of Belebele volume).
+
+`gemini_flash` (Gemini 3.1 Flash Preview) costs slightly more than flash-lite but runs only on Global MMLU + MILU (~23,000 examples total).
 
 ## Architecture
 

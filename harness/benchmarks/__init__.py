@@ -3,6 +3,8 @@ from .mgsm import MGSMBenchmark
 from .include import INCLUDEBenchmark
 from .blend import BLEnDBenchmark
 from .indicgenbench import IndicGenBenchBenchmark
+from .global_mmlu import GlobalMMLUBenchmark
+from .milu import MILUBenchmark
 
 BENCHMARKS = {
     "belebele": BelebeleBenchmark,
@@ -10,6 +12,8 @@ BENCHMARKS = {
     "include": INCLUDEBenchmark,
     "blend": BLEnDBenchmark,
     "indicgenbench": IndicGenBenchBenchmark,
+    "global_mmlu": GlobalMMLUBenchmark,
+    "milu": MILUBenchmark,
 }
 
 __all__ = [
@@ -18,5 +22,7 @@ __all__ = [
     "INCLUDEBenchmark",
     "BLEnDBenchmark",
     "IndicGenBenchBenchmark",
+    "GlobalMMLUBenchmark",
+    "MILUBenchmark",
     "BENCHMARKS",
 ]
