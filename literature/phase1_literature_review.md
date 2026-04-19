@@ -2,7 +2,15 @@
 
 **Date:** April 2026  
 **Models:** Claude Opus 4.7 · GPT-5.4 · Gemini 3.1 Pro  
-**Scope:** Official technical reports, model cards, system cards, and blog posts from Anthropic, OpenAI, and Google
+**Scope:** Official technical reports, model cards, system cards, blog posts, and supplementary community/third-party evaluations
+
+## Release Timeline
+
+| Model | Release Date | Multilingual Positioning |
+|-------|-------------|--------------------------|
+| Gemini 3.1 Pro | Feb 20, 2026 (preview) | First to land; set "13 of 16 benchmarks" narrative |
+| GPT-5.4 | Mar 5, 2026 (Thinking + Pro); mini/nano Mar 17 | Positioned around agentic/computer-use gains, not multilingual |
+| Claude Opus 4.7 | Apr 16, 2026 | Anthropic's retake; strongest coding, claimed to close multilingual gap |
 
 ---
 
@@ -15,7 +23,9 @@
 - [Claude 3 Model Card (predecessor baseline)](https://www-cdn.anthropic.com/de8ba9b01c9ab7cbabf5c33b80b7bbc618857627/Model_Card_Claude_3.pdf)
 
 ### Multilingual Claims
-Anthropic's Opus 4.7 announcement focuses on coding, vision, long-context, and agentic performance. **No dedicated multilingual section or benchmark scores are disclosed** in the Opus 4.7 release materials.
+Anthropic's Opus 4.7 announcement focuses on coding, vision, long-context, and agentic performance. **No dedicated multilingual section is disclosed** in the Opus 4.7 release materials, but third-party evaluations fill in some scores.
+
+**Notable: Claude Opus 4.7 shipped with a new tokenizer.** Tokenizer efficiency on non-Latin scripts (Indic, Amharic, Thai) is a leading indicator of low-resource behavior and pricing — fewer tokens per character means lower cost and better context utilization for these scripts. This is the most practically significant multilingual-relevant change in the Opus 4.7 release even though it was not framed as a multilingual feature.
 
 General model-level claims (from broader Claude documentation):
 - Claude models support multilingual text input and output
@@ -24,9 +34,11 @@ General model-level claims (from broader Claude documentation):
 ### Benchmark Scores (Opus 4.7)
 | Benchmark | Score | Notes |
 |-----------|-------|-------|
-| SWE-bench Multilingual | Not disclosed | Mentioned but score not provided |
-| MMMLU | Not disclosed | No score in release materials |
-| MGSM | Not disclosed | No score in release materials |
+| MMMLU (14-language translated MMLU) | **91.5%** | Third-party / community eval |
+| Global-MMLU-Lite (culturally rebalanced) | **~92.2%** | Based on 4.6 baseline; 4.7 marginally higher |
+| SWE-bench Multilingual | **80.5%** | Coding benchmark — less language-sensitive |
+| MMLU (English baseline) | **92.4%** | Reference point |
+| MGSM | Not disclosed | No published score |
 
 ### Predecessor Baseline (Claude 3 Opus — for comparison)
 | Benchmark | Score | Languages |
@@ -64,8 +76,9 @@ Anthropic does not disclose multilingual training data composition publicly.
 Released March 5, 2026. Available in variants: GPT-5.4 Thinking, GPT-5.4 Pro, GPT-5.4 mini, GPT-5.4 nano.
 
 ### Multilingual Claims
-- Improved multilingual performance over GPT-4 and o1
+- Improved multilingual performance over GPT-4 and o1 claimed, but **multilingual disclosure is the thinnest of the three labs**
 - "Responses sound more natural across accents and speech patterns" in Spanish, Hindi, Japanese, Arabic
+- Community evals suggest GPT-5.x shows "modest or flat" multilingual gains vs GPT-5 — the jump went to agentic/computer-use, not languages
 - Builds on GPT-5 System Card multilingual evaluations (August 2025 baseline)
 
 ### Benchmark Scores
@@ -90,7 +103,13 @@ The GPT-5 System Card (the most detailed public multilingual evaluation, baselin
 
 *Note: Exact per-language figures for GPT-5.4 not separately published; GPT-5 System Card figures used as baseline.*
 
-**MMLU-ProX (2026 leaderboard):** GPT-5.4 ranked #3 with weighted multilingual score of 100% (normalized). Strong across all tested languages.
+**Standard multilingual benchmark scores (third-party):**
+| Benchmark | Score | Notes |
+|-----------|-------|-------|
+| MMMLU | Not publicly reported | Lab has not published |
+| Global-MMLU-Lite | Not reported | Lab has not published |
+| MMLU (English baseline) | **~93%** | Reference point |
+| MMLU-ProX (2026 leaderboard) | ~100% normalized | Ranked #3; strong across tested languages |
 
 ### Languages Mentioned
 14 tested in System Card: Arabic, Bengali, Chinese (Simplified), French, German, Hindi, Indonesian, Italian, Japanese, Korean, Portuguese, Spanish, Swahili, Yoruba.
@@ -127,12 +146,16 @@ Released February 19, 2026. Available via Gemini API, Vertex AI, Gemini app, and
 ### Benchmark Scores
 | Benchmark | Score | Notes |
 |-----------|-------|-------|
-| MMMLU | 92.6% | Up from Gemini 3 Pro 91.8% |
+| MMMLU (14-language translated MMLU) | **92.6%** | Up from Gemini 3 Pro 91.8%; Gemini's headline multilingual number |
+| Global-MMLU-Lite (culturally rebalanced) | **93.2%** | Gemini's clearest multilingual win over the other two models |
+| MMLU (English baseline) | **93–94%** | Reference point |
 | WMT23 (predecessor) | BLEURT 71.7 | Gemini 2.5-era baseline |
 | Multilingual safety | +0.11% vs. Gemini 3 Pro | Safety-specific metric only |
 | MMLU-ProX | ~100% (normalized) | Ranked #2 on BenchLM leaderboard |
 
 **Artificial Analysis multilingual leaderboard (April 2026):** Gemini 3.1 Pro Preview scored **93 overall multilingual average**, **95 in English**, **94 in Chinese, Hindi, and Spanish**.
+
+**Notable:** Gemini 3.1 Flash TTS (companion model) ships with native support for 70+ languages — Google is the only lab putting low-resource language parity in its marketing. The Pro text model card gestures at this but does not table it.
 
 ### Languages Mentioned
 Model card does not provide a specific supported-language list. Multilingual training implied through Google Search corpus. Evaluation confirmed for: Chinese, Hindi, Spanish, English (Artificial Analysis). MMMLU covers 14 languages (same set as GPT-5 System Card).
@@ -150,19 +173,36 @@ Not publicly disclosed at the language-distribution level. Google has stated tra
 
 ## 4. Cross-Model Comparison Summary
 
+### Headline Benchmark Scores
+
+| Benchmark | Claude Opus 4.7 | GPT-5.4 | Gemini 3.1 Pro | Interpretation |
+|-----------|----------------|---------|----------------|----------------|
+| **MMMLU** (14-lang translated MMLU) | 91.5% | not reported | 92.6% | ~1pt delta; practitioners consider this range saturated |
+| **Global-MMLU-Lite** (culturally rebalanced) | ~92.2% | not reported | **93.2%** | Gemini's clearest win; ~1pt advantage |
+| **SWE-bench Multilingual** (coding) | **80.5%** | not reported | 80.6% overall | Effectively tied; coding less language-sensitive |
+| **MMLU** (English baseline) | 92.4% | ~93% | 93–94% | English↔multilingual gap has narrowed significantly |
+
+**Key takeaway from the PDF:** At the high-resource end, multilingual is a **three-way tie within noise**. The narrative of Gemini "leading" rests on a ~1-point delta on benchmarks most practitioners consider saturated. GPT-5.4 multilingual scores are largely not public — comparisons that pit it against Opus 4.7 and Gemini 3.1 Pro on MMMLU rely on either GPT-5.2 numbers or third-party reproductions.
+
+### Per-Model Qualitative Findings
+
 | Dimension | Claude Opus 4.7 | GPT-5.4 | Gemini 3.1 Pro |
 |-----------|----------------|---------|----------------|
-| **Official multilingual benchmark** | None disclosed | MMLU (14 langs, GPT-5 baseline) | MMMLU 92.6% |
-| **Languages explicitly benchmarked** | Not disclosed | 14 | Not specified |
-| **Top-20 coverage confirmed** | Partial (high-resource only) | 8/20 (Arabic, Bengali, Chinese, French, German, Hindi, Indonesian, Japanese, Korean, Portuguese, Spanish + others) | Not specified |
-| **Translation performance** | WMT24 leader (Claude 3.5 baseline) | Not reported for 5.4 | WMT23 BLEURT 71.7 |
-| **Math reasoning (multilingual)** | Not reported | Not reported | Not reported |
-| **Open-ended generation (multilingual)** | Not reported | Not reported | Not reported |
-| **Training data disclosure** | None | None | Partial (corpus types only) |
-| **Self-reported language list** | High-resource languages | Not published | Not published |
+| **Multilingual transparency** | Thin — no per-language scores published | Thinnest of all three | Moderate — MMMLU aggregate + safety note |
+| **Official multilingual benchmark** | None in release materials | MMLU (14 langs, GPT-5 baseline) | MMMLU 92.6%, Global-MMLU-Lite 93.2% |
+| **Tokenizer** | **New tokenizer shipped** — directly improves non-Latin script quality and pricing | No disclosed tokenizer change | Not disclosed |
+| **Low-resource marketing** | Not mentioned | Not mentioned | Gemini 3.1 Flash TTS: 70+ native languages |
+| **INCLUDE (third-party eval)** | Stronger on **cultural register / tone** | Stronger on **structured reasoning** in translated tasks | Stronger on **region-specific factual recall** |
+| **Perceived generation quality** | Outputs read more naturally in Korean/Japanese despite lower QA scores | — | Higher QA scores; lower perceived naturalness per user reports |
+| **Multilingual focus in release** | Coding + agentic; multilingual implicit | Agentic + computer-use; multilingual not mentioned | Broad; multilingual explicitly cited |
 
 ### Key Observation
-**None of the three models publishes a comprehensive per-language breakdown for Opus 4.7, GPT-5.4, or Gemini 3.1 Pro specifically.** The most detailed public multilingual evaluation available is the GPT-5 System Card (14-language MMLU), which predates GPT-5.4. Gemini 3.1 Pro provides only a single aggregate MMMLU score. Claude Opus 4.7 discloses no multilingual metrics at all.
+All three labs cherry-pick benchmarks in their release narratives: "13 of 16 wins" (Gemini), "beats GPT-5.4 and Gemini 3.1 Pro on most benchmarks" (Anthropic) — both can be simultaneously true on different benchmark sets. **None of the three models publishes a per-language breakdown across the full top-20.** This project fills that gap.
+
+### Methodological Caveats (from source document)
+- All three models' numbers come from lab-published technical reports using different prompting, eval harnesses, and shot counts — direct comparison is approximate
+- Gemini 3.1 Pro has been in preview since February; GA scores may shift
+- GPT-5.4 MMMLU comparisons rely on GPT-5.2 numbers or third-party reproductions, not official GPT-5.4 disclosures
 
 This is a significant gap — and a direct motivation for this project.
 
