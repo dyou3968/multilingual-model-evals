@@ -24,8 +24,8 @@ from harness.judge import judge_batch
 logger = logging.getLogger(__name__)
 
 _DEFAULT_RESULTS_DIR = Path(os.getenv("RESULTS_DIR", "results"))
-_GENERATION_CONCURRENCY = int(os.getenv("GENERATION_CONCURRENCY", "8"))
-_JUDGE_CONCURRENCY = int(os.getenv("JUDGE_CONCURRENCY", "5"))
+_GENERATION_CONCURRENCY = int(os.getenv("GENERATION_CONCURRENCY", "3"))
+_JUDGE_CONCURRENCY = int(os.getenv("JUDGE_CONCURRENCY", "3"))
 
 
 def _results_path(results_dir: Path, benchmark: str, model_key: str) -> Path:
