@@ -191,14 +191,18 @@
 
 | Field | Detail |
 |-------|--------|
-| **Task type** | Everyday cultural/factual knowledge QA grounded in local contexts |
-| **Languages** | ~52 languages. Top-20 approx: Korean, Japanese, Arabic, Hindi, Indonesian, Turkish, French, German, Spanish, Mandarin — **~12/20** |
-| **Top-20 gaps** | Punjabi, Marathi, Telugu, Tamil, Bengali (limited), Urdu (limited) |
-| **Metric** | Exact match / F1 |
+| **Paper** | [arXiv:2406.09948](https://arxiv.org/abs/2406.09948) |
+| **Task type** | Everyday cultural/factual knowledge QA grounded in local contexts — short-answer and multiple-choice formats |
+| **Dataset size** | 52,600 QA pairs |
+| **Languages** | 13 languages across 16 countries/regions, including low-resource languages (Amharic, Assamese, Azerbaijani, Hausa, Sundanese). Top-20 approx: Korean, Japanese, Arabic, Hindi, Indonesian, Turkish, French, German, Spanish, Mandarin — **~10/20** |
+| **Top-20 gaps** | Punjabi, Marathi, Telugu, Tamil, Bengali, Urdu, Russian, Vietnamese, Portuguese |
+| **Metric** | Exact match (short-answer); accuracy (MCQ) |
 | **Claude Opus 4.7** | Not published |
 | **GPT-5.4** | Not published |
 | **Gemini 3.1 Pro** | Not published |
-| **Limitations** | 2024 benchmark; limited adoption; South Asian language coverage uneven |
+| **Key finding** | GPT-4 (best model evaluated) shows up to **57.34% performance difference** between best and worst-performing cultures on short-answer tasks. For mid-to-high-resource languages, models perform better in local language; for low-resource languages, models paradoxically perform better when prompted in English. |
+| **Incorporated** | **Yes** — selected for this project (cultural knowledge gap) |
+| **Limitations** | 13 languages is a limited scope; South Asian language coverage thin; short-answer scoring sensitive to surface form variation |
 
 ---
 
@@ -206,29 +210,36 @@
 
 | Field | Detail |
 |-------|--------|
-| **Task type** | Multiple-choice knowledge QA across diverse domains (underrepresented languages focus) |
-| **Languages** | 44 languages. Top-20 coverage: Hindi, Bengali, Urdu, Tamil, Telugu, Marathi, and others — strong South Asian coverage |
+| **Paper** | [arXiv:2411.19799](https://arxiv.org/abs/2411.19799) |
+| **Task type** | Knowledge- and reasoning-centric MCQ — sourced from regional/local exam materials (not translated from English) |
+| **Dataset size** | 197,243 QA pairs |
+| **Languages** | 44 written languages. Top-20 coverage: Hindi, Bengali, Urdu, Tamil, Telugu, Marathi, Arabic, Turkish, Indonesian, Korean, Vietnamese, and others — strong South Asian + broad coverage |
 | **Top-20 gaps** | Punjabi (limited); most top-20 present |
 | **Metric** | Accuracy (%) |
-| **Claude Opus 4.7** | Not published (frontier models in original 2024 paper show 60–70% avg) |
-| **GPT-5.4** | Not published |
-| **Gemini 3.1 Pro** | Not published |
-| **Limitations** | MCQ format; uneven question quality across languages; limited to classification format |
-
----
-
-### 13. IndicGenBench / IndicBench
-
-| Field | Detail |
-|-------|--------|
-| **Task type** | Generation: summarization, translation, QA, cross-lingual QA (Indic focus) |
-| **Languages** | 29 Indic languages. Top-20: Hindi, Bengali, Marathi, Telugu, Tamil, Urdu, Punjabi — **7/20** |
-| **Top-20 gaps** | All non-Indic top-20 languages |
-| **Metric** | ROUGE, chrF, exact match |
 | **Claude Opus 4.7** | Not published |
 | **GPT-5.4** | Not published |
 | **Gemini 3.1 Pro** | Not published |
-| **Limitations** | Indic-only scope; generation metrics (ROUGE) imperfect proxies for quality |
+| **Key finding** | Directly addresses the translation-artifact problem — questions are sourced from authentic regional exams. Significant performance differential between languages highlights deployment gap in underrepresented regions. |
+| **Incorporated** | **Yes** — selected for this project (largest authentic multilingual QA benchmark; addresses cultural authenticity gap) |
+| **Limitations** | MCQ format only; question difficulty varies by country's exam standards; requires regional exam access for expansion |
+
+---
+
+### 13. IndicGenBench
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [ACL Anthology 2024.acl-long.595](https://aclanthology.org/2024.acl-long.595/) |
+| **Task type** | User-facing generation: cross-lingual summarization, machine translation, cross-lingual QA |
+| **Languages** | 29 Indic languages spanning 13 scripts and 4 language families. Top-20: Hindi, Bengali, Marathi, Telugu, Tamil, Urdu, Punjabi — **7/20** |
+| **Top-20 gaps** | All non-Indic top-20 languages (Mandarin, Spanish, Arabic, Russian, Japanese, Korean, French, German, Turkish, Vietnamese, Indonesian, Portuguese) |
+| **Metric** | ROUGE, chrF (summarization/MT); exact match (QA) |
+| **Claude Opus 4.7** | Not published |
+| **GPT-5.4** | Not published |
+| **Gemini 3.1 Pro** | Not published |
+| **Key finding** | First large-scale multi-way parallel evaluation dataset for under-represented Indic languages. Even the strongest model (PaLM-2) shows a significant performance gap vs. English across all 29 languages. GPT-3.5, GPT-4, PaLM-2, and LLaMA evaluated in original paper. |
+| **Incorporated** | **Yes** — selected for this project (only generation benchmark covering Punjabi, Marathi, and other under-represented South Asian languages) |
+| **Limitations** | Indic-only scope; ROUGE/chrF are imperfect proxies for human-judged quality; cross-lingual QA relies on English-pivot structure |
 
 ---
 
