@@ -404,6 +404,106 @@ Claude Opus 4.7, GPT-5.4, and Gemini 3.1 Pro have not published per-language sco
 
 ---
 
+---
+
+## Additional Benchmarks (from PDF appendix — labs not publishing scores on these)
+
+### 19. IrokoBench (AfriMMLU / AfriXNLI / AfriMGSM)
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2406.03368](https://arxiv.org/abs/2406.03368) · NAACL 2025 |
+| **Task type** | Three-task suite: knowledge QA (MCQ), NLI, math reasoning — all for African languages |
+| **Languages** | 16 typologically diverse African languages. Human-translated, not MT. **None of the top-20 target languages.** |
+| **Metric** | Accuracy per task |
+| **Claude Opus 4.7** | Not published (labs cite it but don't table numbers) |
+| **GPT-5.4** | Not published |
+| **Gemini 3.1 Pro** | Not published |
+| **Notes** | Masakhane-led. De facto serious eval for African LLM work. Includes AfriMGSM — the only MGSM-style math benchmark for African languages. All three labs omit this from release pages. |
+
+---
+
+### 20. Global-MMLU (Full — not Lite)
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2412.03304](https://arxiv.org/abs/2412.03304) · Cohere For AI |
+| **Task type** | Culturally rebalanced MMLU — human + LLM pipeline rewrites Western-centric items |
+| **Languages** | 42 languages · ~14k Q/language · 28% of items flagged culturally-sensitive |
+| **Top-20 gaps** | Coverage broad; likely covers most of the top-20 |
+| **Metric** | Accuracy (%) |
+| **Claude Opus 4.7** | ~92.2% (on Lite subset) |
+| **GPT-5.4** | Not reported |
+| **Gemini 3.1 Pro** | **93.2%** (Lite) — Gemini's clearest multilingual win |
+| **Notes** | Labs cite Global-MMLU-Lite (a small subset); the full eval is rarely reported. The full version with cultural rebalancing is more meaningful than standard MMMLU. |
+
+---
+
+### 21. SEA-HELM
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2502.14301](https://arxiv.org/abs/2502.14301) · AI Singapore / SEA-LION project |
+| **Task type** | Holistic SEA suite: NLP classics, LLM-specifics, SEA linguistics, SEA culture, safety |
+| **Languages** | 5: Filipino, Indonesian, Tamil, Thai, Vietnamese. Top-20: Indonesian, Tamil, Vietnamese — **3/20** |
+| **Top-20 gaps** | All other 17 top-20 languages |
+| **Metric** | Composite score across task categories |
+| **Claude Opus 4.7** | Not published |
+| **GPT-5.4** | Not published |
+| **Gemini 3.1 Pro** | Not published |
+| **Notes** | The serious Southeast Asian benchmark. Includes safety evaluation and SEA-specific cultural tasks — not just translated English content. |
+
+---
+
+### 22. SeaExam / SeaBench
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2502.06298](https://arxiv.org/abs/2502.06298) · DAMO Academy |
+| **Task type** | SeaExam: real SEA-country exam questions (history, geography, literature). SeaBench: MT-Bench-style multi-turn instruction following across 10 task categories |
+| **Languages** | SeaExam: Indonesian, Thai, Vietnamese. Top-20: Indonesian, Vietnamese — **2/20** |
+| **Metric** | Accuracy (SeaExam); LLM-judge score (SeaBench) |
+| **Claude Opus 4.7** | Not published |
+| **GPT-5.4** | Not published |
+| **Gemini 3.1 Pro** | Not published |
+| **Notes** | Locally-sourced rather than translated — different signal than translated benchmarks. SeaBench is notable as one of the few multi-turn instruction-following benchmarks with SEA language coverage. |
+
+---
+
+### 23. MEGAVERSE
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2311.07463](https://arxiv.org/abs/2311.07463) · NAACL 2024 · Microsoft Research |
+| **Task type** | Aggregator benchmark — 22 multilingual datasets bundled (including multimodal). Designed for apples-to-apples model comparison |
+| **Languages** | 83 languages · 2 multimodal datasets |
+| **Top-20 gaps** | Broad coverage; likely covers most of the top-20 |
+| **Metric** | Composite across 22 datasets |
+| **Claude Opus 4.7** | Not published |
+| **GPT-5.4** | Not published |
+| **Gemini 3.1 Pro** | Not published |
+| **Critical caveat** | **Authors flagged that "almost all models are contaminated" with these datasets** — a fundamental concern for any benchmark using MEGAVERSE or its component datasets. This is why fresh synthetic data generation matters for our benchmark. |
+
+---
+
+### 24. Afri-MCQA
+
+| Field | Detail |
+|-------|--------|
+| **Paper** | [arXiv:2601.05699](https://arxiv.org/abs/2601.05699) · early 2026 |
+| **Task type** | Multilingual + multimodal cultural visual QA for African contexts |
+| **Languages** | 15 African languages · multimodal. **None of the top-20 target languages.** |
+| **Metric** | Accuracy (%) |
+| **Notes** | Newest benchmark in the appendix (early 2026). Relevant if the project later expands to multimodal multilingual evaluation. |
+
+---
+
+## Key Finding 6: Contamination is Endemic
+
+MEGAVERSE authors found nearly every model is contaminated with their component datasets. This affects any benchmark that reuses widely-distributed evaluation data. It is a core methodological argument for our synthetic data generation approach — freshly generated items that have not been in any training corpus.
+
+---
+
 ## Sources
 
 - [BenchMAX (arXiv:2502.07346)](https://arxiv.org/html/2502.07346v1)
@@ -411,6 +511,11 @@ Claude Opus 4.7, GPT-5.4, and Gemini 3.1 Pro have not published per-language sco
 - [Artificial Analysis Multilingual](https://artificialanalysis.ai/models/multilingual)
 - [MMLU-ProX (arXiv:2503.10497)](https://arxiv.org/html/2503.10497v1)
 - [AI Language Proficiency Monitor (arXiv:2507.08538)](https://arxiv.org/html/2507.08538v1)
-- [Multilingual Evaluations in LLMs — Medium](https://medium.com/@vbsowmya/multilingual-evaluations-in-llms-a-comparison-1d58b0fd9848)
+- [IrokoBench (arXiv:2406.03368)](https://arxiv.org/abs/2406.03368)
+- [Global-MMLU (arXiv:2412.03304)](https://arxiv.org/abs/2412.03304)
+- [SEA-HELM (arXiv:2502.14301)](https://arxiv.org/abs/2502.14301)
+- [SeaExam/SeaBench (arXiv:2502.06298)](https://arxiv.org/abs/2502.06298)
+- [MEGAVERSE (arXiv:2311.07463)](https://arxiv.org/abs/2311.07463)
+- [Afri-MCQA (arXiv:2601.05699)](https://arxiv.org/abs/2601.05699)
 - [MGSM Leaderboard](https://llm-stats.com/benchmarks/mgsm)
 - [MMMLU Leaderboard](https://llm-stats.com/benchmarks/mmmlu)

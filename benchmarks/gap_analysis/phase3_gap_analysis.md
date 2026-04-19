@@ -183,18 +183,45 @@ None of the three target models has published the data needed for a fair cross-m
 
 ---
 
+## Gap 7: Southeast Asia — Emerging Coverage, Still Thin
+
+**Priority: MEDIUM-HIGH**
+
+### What's missing
+Southeast Asian languages in the top-20 (Vietnamese, Indonesian) are better covered than South Asian languages, but still lack:
+- SEA-HELM (AI Singapore) covers Indonesian, Tamil, Vietnamese holistically — but no frontier model scores published
+- SeaExam/SeaBench (DAMO) covers Indonesian, Thai, Vietnamese — locally sourced exam questions + multi-turn instruction following, but no frontier model scores
+
+### Recommended task additions
+Include Indonesian and Vietnamese in all task categories of the new benchmark, with culturally grounded prompts (not translated from English).
+
+---
+
+## Gap 8: Benchmark Contamination — Synthetic Data as Mitigation
+
+**Priority: STRUCTURAL**
+
+### What's missing
+MEGAVERSE authors (Microsoft Research, NAACL 2024) found that **nearly every major model is contaminated with widely-distributed multilingual evaluation datasets**. This means published scores on MMMLU, Belebele, XNLI, and similar benchmarks may reflect memorization rather than generalization — particularly at the frontier model scale where training data is enormous.
+
+### Why this shapes our benchmark design
+This is the strongest methodological argument for synthetic data generation: **freshly generated benchmark items that have not appeared in any model's training corpus provide contamination-free evaluation**. The multi-model collaborative generation approach (each model generates, the others critique) additionally distributes any residual data-knowledge bias across all three models.
+
+---
+
 ## Recommended Benchmark Design Principles (for Phase 4)
 
-Based on the gap analysis, the new benchmark should:
+Based on the gap analysis and PDF findings, the new benchmark should:
 
 1. **Cover all 20 languages** for every task — no partial coverage
-2. **Include natively authored or culturally reviewed content** — not purely translated from English
-3. **Mix task types**: MCQ (for comparability to existing benchmarks), reasoning (math, logic, causal), instruction following (verifiable), and open-ended generation (judge-scored)
-4. **Use multi-judge consensus** (all three models judge each other) for generation tasks — eliminates single-judge bias
-5. **Track self-evaluation bias** explicitly — flag cases where a model scores itself differently than the other two judges
-6. **Use synthetic data generation** with cross-model review: each model generates benchmark items; the other two models critique and improve them
-7. **Report per-language, per-task scores** — no aggregate-only reporting
+2. **Use synthetic data generation** as the primary content source — avoids contamination with training data; multi-model collaborative authorship (each model generates, others critique and improve)
+3. **Locally grounded, not translated** — follow the methodological shift that INCLUDE, BLEnD, SeaExam, and IrokoBench have made away from translated English benchmarks
+4. **Mix task types**: MCQ (for comparability), reasoning (math, logic, causal), instruction following (verifiable), and open-ended generation (judge-scored)
+5. **Use multi-judge consensus** (all three models judge each other) for generation tasks — eliminates single-judge bias and the GPT-4-only judge problem in MT-Bench
+6. **Track self-evaluation bias** explicitly — flag cases where a model scores itself differently than the other two judges
+7. **Report per-language, per-task scores** — no aggregate-only reporting; aggregates obscure the low-resource performance drop
 8. **Publish all raw outputs** — enable external researchers to re-score with new judge models
+9. **Include a tokenizer-efficiency proxy metric** — track tokens-per-character ratio for each model on each language as a leading indicator of low-resource quality
 
 ---
 
