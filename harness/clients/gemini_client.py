@@ -1,5 +1,6 @@
 import os
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from tenacity import retry, stop_after_attempt, wait_exponential
 from .base import BaseClient
 from harness.config import MODELS
@@ -7,8 +8,7 @@ from harness.config import MODELS
 
 class GeminiClient(BaseClient):
     def __init__(self):
-        genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-        self._model = genai.GenerativeModel(MODELS["gemini"])
+        self._client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
 
     @property
     def model_key(self) -> str:
@@ -26,12 +26,14 @@ class GeminiClient(BaseClient):
         max_tokens: int = 1024,
         temperature: float = 0.0,
     ) -> str:
-        full_prompt = f"{system}\n\n{prompt}" if system else prompt
-        config = genai.types.GenerationConfig(
+        config = types.GenerateContentConfig(
+            system_instruction=system or "",
             max_output_tokens=max_tokens,
             temperature=temperature,
         )
-        response = await self._model.generate_content_async(
-            full_prompt, generation_config=config
+        response = await self._client.aio.models.generate_content(
+            model=self.model_id,
+            contents=prompt,
+            config=config,
         )
         return response.text.strip()
