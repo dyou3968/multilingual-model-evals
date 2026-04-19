@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import anthropic
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -27,10 +29,10 @@ class ClaudeClient(BaseClient):
         max_tokens: int = 1024,
         temperature: float = 0.0,
     ) -> str:
+        # temperature is deprecated for claude-opus-4-7 and later models
         kwargs = dict(
             model=self.model_id,
             max_tokens=max_tokens,
-            temperature=temperature,
             messages=[{"role": "user", "content": prompt}],
         )
         if system:

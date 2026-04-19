@@ -12,6 +12,9 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
 import typer
 from rich.console import Console
 from rich.logging import RichHandler
