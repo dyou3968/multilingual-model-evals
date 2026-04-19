@@ -1,6 +1,6 @@
 # Multilingual Model Evaluations
 
-A benchmarking harness comparing **Claude Opus 4.7**, **GPT-5.4**, and **Gemini 3.1 Pro** across the top 20 global speaker languages on the Tier 1 benchmark suite.
+A benchmarking harness comparing **Claude Opus 4.7**, **GPT-5.4**, and **Gemini 3.1 Pro** across the top 20 global speaker languages using the [Belebele](https://huggingface.co/datasets/facebook/belebele) reading comprehension benchmark.
 
 ## Project Structure
 
@@ -21,11 +21,7 @@ multilingual-model-evals/
 │   │   └── gemini_client.py
 │   └── benchmarks/
 │       ├── base.py
-│       ├── belebele.py          # Reading comprehension MCQ
-│       ├── mgsm.py              # Math (8-shot chain-of-thought)
-│       ├── include.py           # Regional exam MCQ
-│       ├── blend.py             # Cultural knowledge (MCQ + short-answer)
-│       └── indicgenbench.py     # Summarization, translation, cross-lingual QA
+│       └── belebele.py          # Reading comprehension MCQ
 ├── docs/
 │   └── architecture.md          # System architecture diagram
 ├── benchmarks/
@@ -34,15 +30,13 @@ multilingual-model-evals/
 └── literature/                  # Phase 1 literature review
 ```
 
-## Benchmark Suite (Tier 1)
+## Benchmark
 
 | Benchmark | Task | Languages | Scoring |
 |-----------|------|-----------|---------|
 | [Belebele](https://huggingface.co/datasets/facebook/belebele) | Reading comprehension MCQ | 20 | Exact match |
-| [MGSM](https://huggingface.co/datasets/juletxara/mgsm) | Math word problems (8-shot) | 10 | Numeric extraction |
-| [INCLUDE](https://huggingface.co/datasets/Cohere/include-mit) | Regional exam MCQ | ~15 | Exact match |
-| [BLEnD](https://huggingface.co/datasets/nyu-mll/blend) | Cultural knowledge MCQ + short-answer | 16 | Exact match + judge |
-| [IndicGenBench](https://huggingface.co/datasets/ai4bharat/IndicGenBench) | Summarization / Translation / QA | ~9 | ROUGE-L + chrF + judge |
+
+Belebele presents a passage and four multiple-choice answers per question. Models respond with a single letter (A–D). No judge pass is needed — scoring is fully automated, making it the cleanest and most cost-efficient benchmark to run at scale.
 
 ## Target Languages
 
@@ -83,32 +77,23 @@ GEMINI_MODEL=gemini-3.1-pro
 
 ### 3. Verify setup (optional smoke test)
 
-Run a single benchmark on one model and one language to confirm your keys and dependencies are working:
+Run one model on one language to confirm your keys and dependencies are working:
 
 ```bash
-python run_eval.py \
-  --benchmarks belebele \
-  --models claude \
-  --languages zho_Hans
+python run_eval.py --models claude --languages zho_Hans
 ```
 
 You should see a progress bar and a new file at `results/belebele/claude.jsonl`.
 
 ## Running Experiments
 
-### Full Tier 1 suite (all models, all languages)
+### Full run (all models, all 20 languages)
 
 ```bash
 python run_eval.py
 ```
 
-Estimated cost: **~$1,000–1,500** across all three models. See [Cost Estimates](#cost-estimates) below.
-
-### Specific benchmarks
-
-```bash
-python run_eval.py --benchmarks belebele mgsm
-```
+Estimated cost: **~$227** across all three models. See [Cost Estimates](#cost-estimates) below.
 
 ### Specific models
 
@@ -126,18 +111,26 @@ Model key → model ID mapping (set in `harness/config.py` and overridable via `
 
 ### Specific languages
 
-Language codes are benchmark-specific. Pass the code for the benchmark you're running:
+Belebele uses FLORES-200 language codes:
 
 ```bash
-# Belebele uses FLORES-200 codes
-python run_eval.py --benchmarks belebele --languages zho_Hans hin_Deva arb_Arab
-
-# MGSM uses ISO 639-1 codes
-python run_eval.py --benchmarks mgsm --languages zh hi ar
-
-# INCLUDE and BLEnD use language name strings
-python run_eval.py --benchmarks include --languages Hindi Arabic Korean
+python run_eval.py --languages zho_Hans hin_Deva arb_Arab
 ```
+
+All 20 target language codes:
+
+| Language | Code | Language | Code |
+|----------|------|----------|------|
+| Mandarin Chinese | `zho_Hans` | Punjabi | `pan_Guru` |
+| Spanish | `spa_Latn` | Marathi | `mar_Deva` |
+| English | `eng_Latn` | Telugu | `tel_Telu` |
+| Hindi | `hin_Deva` | Turkish | `tur_Latn` |
+| Arabic | `arb_Arab` | Tamil | `tam_Taml` |
+| Bengali | `ben_Beng` | Vietnamese | `vie_Latn` |
+| Portuguese | `por_Latn` | Korean | `kor_Hang` |
+| Russian | `rus_Cyrl` | French | `fra_Latn` |
+| Japanese | `jpn_Jpan` | German | `deu_Latn` |
+| Urdu | `urd_Arab` | Indonesian | `ind_Latn` |
 
 ### Custom output directory
 
@@ -157,9 +150,8 @@ Every run is resumable. If a run is interrupted, restart with the same command �
 
 ## Output Format
 
-Results are written as append-only JSONL files:
+Results are written as append-only JSONL files at `results/belebele/<model>.jsonl` — one record per example:
 
-**`results/<benchmark>/<model>.jsonl`** — one record per example:
 ```json
 {
   "id": "belebele_zho_Hans_0",
@@ -172,45 +164,22 @@ Results are written as append-only JSONL files:
 }
 ```
 
-**`results/<benchmark>/judge_scores.jsonl`** — multi-judge consensus for generation tasks:
-```json
-{
-  "example_id": "indicgenbench_hi_summarization_0",
-  "scored_model": "claude",
-  "mean_score": 4.333,
-  "cross_judge_mean": 4.5,
-  "self_score": 4,
-  "self_bias": -0.5,
-  "per_judge": {"claude": 4, "openai": 5, "gemini": 4}
-}
-```
-
-`self_bias = self_score − cross_judge_mean`. A positive value means a model scores its own output higher than peers do; negative means it is self-critical.
-
-## Multi-Judge Scoring
-
-For generation tasks (IndicGenBench summarization/translation/QA and BLEnD short-answer), automated metrics alone are insufficient. The harness runs a **multi-judge consensus** pass:
-
-- All three models score each other's outputs on a 1–5 rubric
-- Scores are aggregated into `mean_score` (all judges) and `cross_judge_mean` (excluding self)
-- Self-evaluation bias is tracked explicitly and reported separately
-
-This design means no single model controls its own evaluation score, while still preserving self-scores for analysis.
-
 ## Cost Estimates
+
+Belebele has 900 fixed examples per language × 20 languages = 18,000 total examples. MCQ outputs are a single letter so output tokens are minimal.
 
 Rough estimates at current API pricing (April 2026):
 
-| Benchmark | Examples | Claude Opus 4.7 | GPT-5.4 | Gemini 3.1 Pro | All 3 |
-|-----------|----------|----------------|---------|----------------|-------|
-| Belebele | ~18,000 | ~$115 | ~$75 | ~$37 | **~$227** |
-| MGSM | ~5,000 | ~$85 | ~$55 | ~$20 | **~$160** |
-| INCLUDE | ~7,500 | ~$100 | ~$65 | ~$25 | **~$190** |
-| BLEnD | ~8,000 | ~$90 | ~$60 | ~$22 | **~$172** |
-| IndicGenBench + judge | ~2,700 | ~$135 | ~$55 | ~$40 | **~$230** |
-| **Total** | | **~$525** | **~$310** | **~$144** | **~$979** |
+| Model | Input (~7.2M tokens) | Output (~90K tokens) | Total |
+|-------|---------------------|---------------------|-------|
+| Claude Opus 4.7 | ~$108 | ~$7 | **~$115** |
+| GPT-5.4 | ~$72 | ~$3 | **~$75** |
+| Gemini 3.1 Pro | ~$36 | ~$1 | **~$37** |
+| **All 3 models** | | | **~$227** |
 
-To reduce costs during development:
+No judge pass is needed — Belebele is fully automated exact-match scoring.
+
+To reduce costs further during development:
 - Lower `max_examples_per_language` in `harness/config.py`
 - Run `--models claude` only first to validate correctness
 - Use `--languages` to target a small subset before scaling up
@@ -239,7 +208,7 @@ This project spans four phases:
 - **Phase 1** — Literature review of Claude Opus 4.7, GPT-5.4, and Gemini 3.1 Pro multilingual capabilities
 - **Phase 2** — Audit of 24 existing multilingual benchmarks with coverage matrix
 - **Phase 3** — Gap analysis identifying 8 under-covered areas (low-resource languages, SEA, contamination risk, etc.)
-- **Phase 4** — This harness: running Tier 1 benchmarks and (forthcoming) synthetic benchmark generation
+- **Phase 4** — This harness: running Belebele across all three models and 20 languages
 
 See the `literature/`, `benchmarks/existing/`, and `benchmarks/gap_analysis/` directories for Phase 1–3 documents.
 
