@@ -9,12 +9,14 @@ MODELS = {
     "claude": os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6"),
     "openai": os.getenv("OPENAI_MODEL", "gpt-5.4-mini"),
     "gemini": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite-preview"),
+    "gemini_flash": os.getenv("GEMINI_FLASH_MODEL", "gemini-3.1-flash-preview"),
 }
 
 MODEL_DISPLAY = {
     "claude": "Claude Sonnet 4.6",
     "openai": "GPT-5.4 Mini",
     "gemini": "Gemini 3.1 Flash-Lite Preview",
+    "gemini_flash": "Gemini 3.1 Flash Preview",
 }
 
 # ── Top-20 Languages ─────────────────────────────────────────────────────────
@@ -28,6 +30,8 @@ TOP_20_LANGUAGES = [
         "include": "Chinese",
         "blend": "Chinese",
         "indicgenbench": None,
+        "global_mmlu": "zh",
+        "milu": None,
     },
     {
         "name": "Spanish",
@@ -36,6 +40,8 @@ TOP_20_LANGUAGES = [
         "include": "Spanish",
         "blend": "Spanish",
         "indicgenbench": None,
+        "global_mmlu": "es",
+        "milu": None,
     },
     {
         "name": "English",
@@ -44,6 +50,8 @@ TOP_20_LANGUAGES = [
         "include": "English",
         "blend": "English",
         "indicgenbench": None,
+        "global_mmlu": "en",
+        "milu": "English",
     },
     {
         "name": "Hindi",
@@ -52,6 +60,8 @@ TOP_20_LANGUAGES = [
         "include": "Hindi",
         "blend": "Hindi",
         "indicgenbench": "hi",
+        "global_mmlu": "hi",
+        "milu": "Hindi",
     },
     {
         "name": "Arabic",
@@ -60,6 +70,8 @@ TOP_20_LANGUAGES = [
         "include": "Arabic",
         "blend": "Arabic",
         "indicgenbench": None,
+        "global_mmlu": "ar",
+        "milu": None,
     },
     {
         "name": "Bengali",
@@ -68,6 +80,8 @@ TOP_20_LANGUAGES = [
         "include": "Bengali",
         "blend": None,
         "indicgenbench": "bn",
+        "global_mmlu": "bn",
+        "milu": "Bengali",
     },
     {
         "name": "Portuguese",
@@ -76,6 +90,8 @@ TOP_20_LANGUAGES = [
         "include": "Portuguese",
         "blend": None,
         "indicgenbench": None,
+        "global_mmlu": "pt",
+        "milu": None,
     },
     {
         "name": "Russian",
@@ -84,6 +100,8 @@ TOP_20_LANGUAGES = [
         "include": "Russian",
         "blend": None,
         "indicgenbench": None,
+        "global_mmlu": "ru",
+        "milu": None,
     },
     {
         "name": "Japanese",
@@ -92,6 +110,8 @@ TOP_20_LANGUAGES = [
         "include": "Japanese",
         "blend": "Japanese",
         "indicgenbench": None,
+        "global_mmlu": "ja",
+        "milu": None,
     },
     {
         "name": "Punjabi",
@@ -100,6 +120,8 @@ TOP_20_LANGUAGES = [
         "include": "Punjabi",
         "blend": None,
         "indicgenbench": "pa",
+        "global_mmlu": None,
+        "milu": "Punjabi",
     },
     {
         "name": "Marathi",
@@ -108,6 +130,8 @@ TOP_20_LANGUAGES = [
         "include": "Marathi",
         "blend": None,
         "indicgenbench": "mr",
+        "global_mmlu": None,
+        "milu": "Marathi",
     },
     {
         "name": "Telugu",
@@ -116,6 +140,8 @@ TOP_20_LANGUAGES = [
         "include": "Telugu",
         "blend": None,
         "indicgenbench": "te",
+        "global_mmlu": None,
+        "milu": "Telugu",
     },
     {
         "name": "Turkish",
@@ -124,6 +150,8 @@ TOP_20_LANGUAGES = [
         "include": "Turkish",
         "blend": "Turkish",
         "indicgenbench": None,
+        "global_mmlu": "tr",
+        "milu": None,
     },
     {
         "name": "Tamil",
@@ -132,6 +160,8 @@ TOP_20_LANGUAGES = [
         "include": "Tamil",
         "blend": None,
         "indicgenbench": "ta",
+        "global_mmlu": None,
+        "milu": "Tamil",
     },
     {
         "name": "Vietnamese",
@@ -140,6 +170,8 @@ TOP_20_LANGUAGES = [
         "include": "Vietnamese",
         "blend": None,
         "indicgenbench": None,
+        "global_mmlu": "vi",
+        "milu": None,
     },
     {
         "name": "Korean",
@@ -148,6 +180,8 @@ TOP_20_LANGUAGES = [
         "include": "Korean",
         "blend": "Korean",
         "indicgenbench": None,
+        "global_mmlu": "ko",
+        "milu": None,
     },
     {
         "name": "French",
@@ -156,6 +190,8 @@ TOP_20_LANGUAGES = [
         "include": "French",
         "blend": "French",
         "indicgenbench": None,
+        "global_mmlu": "fr",
+        "milu": None,
     },
     {
         "name": "German",
@@ -164,6 +200,8 @@ TOP_20_LANGUAGES = [
         "include": "German",
         "blend": "German",
         "indicgenbench": None,
+        "global_mmlu": "de",
+        "milu": None,
     },
     {
         "name": "Urdu",
@@ -172,6 +210,8 @@ TOP_20_LANGUAGES = [
         "include": "Urdu",
         "blend": None,
         "indicgenbench": "ur",
+        "global_mmlu": "ur",
+        "milu": None,
     },
     {
         "name": "Indonesian",
@@ -180,6 +220,8 @@ TOP_20_LANGUAGES = [
         "include": "Indonesian",
         "blend": "Indonesian",
         "indicgenbench": None,
+        "global_mmlu": "id",
+        "milu": None,
     },
 ]
 
@@ -192,9 +234,11 @@ def languages_for(benchmark: str) -> list[dict]:
 DATASET_IDS = {
     "belebele": "facebook/belebele",
     "mgsm": "juletxara/mgsm",
-    "include": "Cohere/include-mit",      # verify: https://huggingface.co/datasets/Cohere/include-mit
-    "blend": "nyu-mll/blend",             # verify: may be under a different org
-    "indicgenbench": "ai4bharat/IndicGenBench",  # verify on HF
+    "include": "Cohere/include-mit",
+    "blend": "nyu-mll/blend",
+    "indicgenbench": "ai4bharat/IndicGenBench",
+    "global_mmlu": "CohereLabs/Global-MMLU",
+    "milu": "ai4bharat/MILU",             # gated: requires HF_TOKEN + accepted terms
 }
 
 # ── Benchmark Defaults ────────────────────────────────────────────────────────
@@ -225,6 +269,17 @@ BENCHMARK_CONFIGS = {
         "max_examples_per_language": 200,   # generation is expensive; cap per lang
         "scoring": "rouge_chrf",
         "judge_subset": 100,               # examples per language sent to multi-judge
+    },
+    "global_mmlu": {
+        "n_shots": 0,
+        "max_examples_per_language": 1000,  # 14,300 available; cap for cost control
+        "scoring": "exact_match",
+    },
+    "milu": {
+        "n_shots": 0,
+        "max_examples_per_language": 1000,  # 4k-15k available; cap for cost control
+        "scoring": "exact_match",
+        "requires_hf_token": True,          # gated dataset
     },
 }
 

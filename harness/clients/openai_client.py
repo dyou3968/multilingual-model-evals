@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import asyncio
 import os
 from openai import AsyncOpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 from .base import BaseClient
 from harness.config import MODELS
+
+_OPENAI_MIN_INTERVAL = float(os.getenv("OPENAI_MIN_INTERVAL", "1.0"))
 
 
 class OpenAIClient(BaseClient):
@@ -27,6 +30,7 @@ class OpenAIClient(BaseClient):
         max_tokens: int = 1024,
         temperature: float = 0.0,
     ) -> str:
+        await asyncio.sleep(_OPENAI_MIN_INTERVAL)
         messages = []
         if system:
             messages.append({"role": "system", "content": system})

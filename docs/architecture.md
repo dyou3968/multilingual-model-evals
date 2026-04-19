@@ -16,12 +16,14 @@ flowchart TD
 
     subgraph Config ["harness/config.py  —  Central Configuration"]
         LangMap["TOP_20_LANGUAGES\n────────────────\nlanguage name ↔\nFLORES-200 code"]
-        ModelMap["MODELS\n────────────────\nclaude → claude-sonnet-4-6\nopenai → gpt-5.4-mini\ngemini → gemini-3.1-flash-lite-preview"]
+        ModelMap["MODELS\n────────────────\nclaude → claude-sonnet-4-6\nopenai → gpt-5.4-mini\ngemini → gemini-3.1-flash-lite-preview\ngemini_flash → gemini-3.1-flash-preview"]
         BenchCfg["BENCHMARK_CONFIGS\n────────────────\nmax_examples_per_language\ndataset ID"]
     end
 
     subgraph DataLayer ["harness/benchmarks/  —  Benchmark Loader"]
         Belebele["belebele.py\n────────────────\nReading comprehension MCQ\n900 examples / language\nFLORES-200 language codes\nfacebook/belebele on HF"]
+        GlobalMMLU["global_mmlu.py\n────────────────\nKnowledge MCQ · 57 subjects\n1,000 examples / language\nISO 639-1 codes · 16 languages\nCohereLabs/Global-MMLU on HF"]
+        MILU["milu.py\n────────────────\nKnowledge MCQ · Indic languages\n1,000 examples / language\n7 languages · gated (HF_TOKEN)\nai4bharat/MILU on HF"]
     end
 
     HF[("🤗 HuggingFace\nDatasets")]
@@ -67,8 +69,13 @@ Core async loop. For each language × model:
 ### Config — `harness/config.py`
 Central config for the 20 target languages (name → FLORES-200 code), model IDs (overridable via `.env`), and Belebele dataset settings.
 
-### Benchmark Loader — `harness/benchmarks/belebele.py`
-Loads `facebook/belebele` from HuggingFace. Each example has a passage, question, and four answer options (A–D). The loader builds the prompt string and records the correct answer letter as the reference. 900 examples per language, no few-shot prefix required.
+### Benchmark Loaders — `harness/benchmarks/`
+
+**`belebele.py`** — Loads `facebook/belebele`. Each example has a passage, question, and four answer options (A–D). 900 examples per language across all 20 target languages.
+
+**`global_mmlu.py`** — Loads `CohereLabs/Global-MMLU`. Knowledge MCQ covering 57 academic subjects, translated into 42 languages. Covers 16 of the 20 target languages (ISO 639-1 codes). Capped at 1,000 examples per language.
+
+**`milu.py`** — Loads `ai4bharat/MILU` (gated — requires `HF_TOKEN`). Knowledge MCQ focused on Indic languages. Covers 7 of the 20 target languages. Capped at 1,000 examples per language. Options stored as `option1–4`, answer as the key name of the correct option (e.g. `"option2"`).
 
 ### API Clients — `harness/clients/`
 Three thin async wrappers with an identical interface (`complete(prompt, system, max_tokens, temperature)`). All use `tenacity` for exponential-backoff retry on rate limits and transient errors.
