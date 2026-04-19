@@ -1,11 +1,10 @@
 """
-CLI entry point for the multilingual evaluation harness.
+CLI entry point for the Belebele multilingual evaluation harness.
 
 Usage examples:
-  python run_eval.py                                    # all benchmarks, all models, all languages
-  python run_eval.py --benchmarks belebele mgsm        # specific benchmarks
-  python run_eval.py --models claude openai            # specific models
-  python run_eval.py --languages hi bn mr              # specific language codes
+  python run_eval.py                                    # all models, all 20 languages
+  python run_eval.py --models claude                   # single model
+  python run_eval.py --languages zho_Hans hin_Deva     # specific FLORES-200 language codes
   python run_eval.py --results-dir custom/output/dir
 """
 import asyncio
@@ -24,7 +23,7 @@ from harness.runner import run_all
 app = typer.Typer(add_completion=False)
 console = Console()
 
-_TIER1 = ["belebele", "mgsm", "include", "blend", "indicgenbench"]
+_DEFAULT_BENCHMARKS = ["belebele"]
 
 
 def _setup_logging(verbose: bool) -> None:
@@ -41,7 +40,7 @@ def main(
     benchmarks: Optional[list[str]] = typer.Option(
         None,
         "--benchmarks", "-b",
-        help=f"Benchmarks to run. Defaults to Tier 1 suite: {_TIER1}",
+        help="Benchmarks to run. Defaults to belebele.",
     ),
     models: Optional[list[str]] = typer.Option(
         None,
@@ -62,7 +61,7 @@ def main(
 ) -> None:
     _setup_logging(verbose)
 
-    selected_benchmarks = benchmarks or _TIER1
+    selected_benchmarks = benchmarks or _DEFAULT_BENCHMARKS
     selected_models = models or list(MODELS.keys())
 
     # Validate
