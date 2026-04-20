@@ -210,7 +210,7 @@ TOP_20_LANGUAGES = [
         "include": "Urdu",
         "blend": None,
         "indicgenbench": "ur",
-        "global_mmlu": "ur",
+        "global_mmlu": None,   # not available in CohereLabs/Global-MMLU dataset
         "milu": None,
     },
     {

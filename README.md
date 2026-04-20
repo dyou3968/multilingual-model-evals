@@ -33,7 +33,7 @@ multilingual-model-evals/
 │   └── benchmarks/
 │       ├── base.py
 │       ├── belebele.py          # Reading comprehension MCQ (20 languages)
-│       ├── global_mmlu.py       # Knowledge MCQ — CohereLabs (16 languages)
+│       ├── global_mmlu.py       # Knowledge MCQ — CohereLabs (15 languages)
 │       └── milu.py              # Knowledge MCQ — Indic languages (7 languages, gated)
 ├── docs/
 │   └── architecture.md          # System architecture diagram
@@ -53,11 +53,11 @@ multilingual-model-evals/
 | Benchmark | Task | Languages | Examples/lang | Scoring | Auth |
 |-----------|------|-----------|---------------|---------|------|
 | [Belebele](https://huggingface.co/datasets/facebook/belebele) | Reading comprehension MCQ | 20/20 | 900 (full set) | Exact match | Public |
-| [Global MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU) | Knowledge MCQ (57 subjects) | 16/20 | 1,000 (capped) | Exact match | Public |
+| [Global MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU) | Knowledge MCQ (57 subjects) | 15/20 | 1,000 (capped) | Exact match | Public |
 | [MILU](https://huggingface.co/datasets/ai4bharat/MILU) | Knowledge MCQ — Indic languages | 7/20 | 1,000 (capped) | Exact match | Gated¹ |
 
 **Language coverage gaps:**
-- Global MMLU does not cover: Punjabi, Marathi, Telugu, Tamil
+- Global MMLU does not cover: Punjabi, Marathi, Tamil, Urdu (not in dataset)
 - MILU covers only Indic languages: English, Hindi, Bengali, Punjabi, Marathi, Telugu, Tamil
 
 ¹ MILU requires accepting terms at huggingface.co/datasets/ai4bharat/MILU and setting `HF_TOKEN` in `.env`.
@@ -203,7 +203,7 @@ All three benchmarks use MCQ exact-match scoring — no judge pass needed. MCQ o
 | Gemini 3.1 Flash-Lite Preview | ~$0.7 | ~$0.1 | **~$1** |
 | **All 3 models** | | | **~$30** |
 
-**Global MMLU** — 1,000 examples × 16 languages = 16,000 examples per model (similar token cost to Belebele, ~10% less volume).
+**Global MMLU** — 1,000 examples × 15 languages = 15,000 examples per model (Urdu excluded — not available in dataset).
 
 **MILU** — 1,000 examples × 7 languages = 7,000 examples per model (~40% of Belebele volume).
 

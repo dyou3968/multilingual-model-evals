@@ -22,7 +22,7 @@ flowchart TD
 
     subgraph DataLayer ["harness/benchmarks/  —  Benchmark Loader"]
         Belebele["belebele.py\n────────────────\nReading comprehension MCQ\n900 examples / language\nFLORES-200 language codes\nfacebook/belebele on HF"]
-        GlobalMMLU["global_mmlu.py\n────────────────\nKnowledge MCQ · 57 subjects\n1,000 examples / language\nISO 639-1 codes · 16 languages\nCohereLabs/Global-MMLU on HF"]
+        GlobalMMLU["global_mmlu.py\n────────────────\nKnowledge MCQ · 57 subjects\n1,000 examples / language\nISO 639-1 codes · 15 languages\nCohereLabs/Global-MMLU on HF"]
         MILU["milu.py\n────────────────\nKnowledge MCQ · Indic languages\n1,000 examples / language\n7 languages · gated (HF_TOKEN)\nai4bharat/MILU on HF"]
     end
 
@@ -74,7 +74,7 @@ Central config for the 20 target languages with per-benchmark code mappings, mod
 
 **`belebele.py`** — Loads `facebook/belebele`. Each example has a passage, question, and four answer options (A–D). 900 examples per language across all 20 target languages.
 
-**`global_mmlu.py`** — Loads `CohereLabs/Global-MMLU`. Knowledge MCQ covering 57 academic subjects, translated into 42 languages. Covers 16 of the 20 target languages (ISO 639-1 codes). Capped at 1,000 examples per language.
+**`global_mmlu.py`** — Loads `CohereLabs/Global-MMLU`. Knowledge MCQ covering 57 academic subjects, translated into 42 languages. Covers 15 of the 20 target languages (ISO 639-1 codes; Urdu excluded — not in dataset). Capped at 1,000 examples per language.
 
 **`milu.py`** — Loads `ai4bharat/MILU` (gated — requires `HF_TOKEN`). Knowledge MCQ focused on Indic languages. Covers 7 of the 20 target languages. Capped at 1,000 examples per language. Options stored as `option1–4`, answer as the key name of the correct option (e.g. `"option2"`).
 
