@@ -6,28 +6,28 @@ Scoring: exact match on A/B/C/D response letter.
 
 ---
 
-## Our Harness Run — Gemini 3.1 Flash-Lite Preview (0-shot)
+## Our Harness Run — 0-shot
 
 15 of the top-20 target languages (Punjabi, Marathi, Tamil, Urdu not in dataset).
 
-| Language | Code | Gemini 3.1 Flash-Lite |
-|----------|------|:---------------------:|
-| English | en | 88.0% |
-| German | de | 87.2% |
-| Spanish | es | 86.9% |
-| Portuguese | pt | 86.8% |
-| Russian | ru | 86.7% |
-| Japanese | ja | 86.0% |
-| Hindi | hi | 85.9% |
-| Mandarin Chinese | zh | 85.8% |
-| French | fr | 85.7% |
-| Indonesian | id | 85.5% |
-| Turkish | tr | 85.4% |
-| Arabic | ar | 85.3% |
-| Vietnamese | vi | 84.9% |
-| Bengali | bn | 83.3% |
-| Korean | ko | 83.1% |
-| **Overall (15 langs)** | | **85.8%** (12,865 / 15,000) |
+| Language | Code | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite |
+|----------|------|:-----------------:|:---------------------:|
+| English | en | **91.5%** | 88.0% |
+| Russian | ru | **90.6%** | 86.7% |
+| German | de | **90.3%** | 87.2% |
+| Portuguese | pt | **90.0%** | 86.8% |
+| Spanish | es | **89.8%** | 86.9% |
+| Turkish | tr | **89.0%** | 85.4% |
+| Indonesian | id | **89.2%** | 85.5% |
+| Mandarin Chinese | zh | **88.6%** | 85.8% |
+| French | fr | **88.1%** | 85.7% |
+| Vietnamese | vi | **88.1%** | 84.9% |
+| Japanese | ja | **88.0%** | 86.0% |
+| Hindi | hi | **87.8%** | 85.9% |
+| Korean | ko | **87.2%** | 83.1% |
+| Arabic | ar | **85.4%** | 85.3% |
+| Bengali | bn | **85.1%** | 83.3% |
+| **Overall (15 langs)** | | **88.6%** (13,281 / 14,994) | **85.8%** (12,865 / 15,000) |
 
 ---
 
@@ -75,6 +75,6 @@ Evaluated on CohereLabs/Global-MMLU across 42 languages with reasoning enabled (
 
 ## Methodology Notes
 
-- **Our harness**: 0-shot, no chain-of-thought, structured letter extraction. 15 languages, 1,000 examples each, capped for cost.
+- **Our harness**: 0-shot, structured letter extraction (last A/B/C/D in response). 15 languages, 1,000 examples each, capped for cost. Claude Sonnet 4.6 spontaneously includes reasoning chains even without a chain-of-thought prompt; scoring extracts the final letter from these chains.
 - **System card**: Reasoning enabled (adaptive thinking at max effort for Claude Sonnet 4.6 / Opus 4.6; max thinking budget 1,024 tokens for Claude Sonnet 4.5; provider defaults for Gemini/GPT). 42 languages, full dataset.
 - These two result sets **are not directly comparable** due to the reasoning vs. 0-shot gap and different language subsets. The system card scores reflect best-effort performance; our harness scores reflect practical inference costs.
