@@ -8,11 +8,11 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from .base import BaseClient
 from harness.config import MODELS
 
-# gemini-3.1-pro-preview has a 25 RPM hard cap; enforce ~24 RPM with a fixed delay
-_GEMINI_MIN_INTERVAL = float(os.getenv("GEMINI_MIN_INTERVAL", "2.5"))
+# gemini_flash = 1K RPM; with concurrency=3: sleep = 3*60/1000 ≈ 0.18s
+_GEMINI_FLASH_MIN_INTERVAL = float(os.getenv("GEMINI_FLASH_MIN_INTERVAL", "0.18"))
 
 
-class GeminiClient(BaseClient):
+class GeminiFlashClient(BaseClient):
     def __init__(self):
         project = os.environ.get("GOOGLE_CLOUD_PROJECT")
         if project:
@@ -26,11 +26,11 @@ class GeminiClient(BaseClient):
 
     @property
     def model_key(self) -> str:
-        return "gemini_flash_lite"
+        return "gemini_flash"
 
     @property
     def model_id(self) -> str:
-        return MODELS["gemini_flash_lite"]
+        return MODELS["gemini_flash"]
 
     @retry(stop=stop_after_attempt(4), wait=wait_exponential(min=30, max=90))
     async def complete(
@@ -40,7 +40,7 @@ class GeminiClient(BaseClient):
         max_tokens: int = 1024,
         temperature: float = 0.0,
     ) -> str:
-        await asyncio.sleep(_GEMINI_MIN_INTERVAL)  # throttle every attempt including retries
+        await asyncio.sleep(_GEMINI_FLASH_MIN_INTERVAL)
         config = types.GenerateContentConfig(
             system_instruction=system or "",
             max_output_tokens=max_tokens,

@@ -8,15 +8,15 @@ load_dotenv()
 MODELS = {
     "claude": os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6"),
     "openai": os.getenv("OPENAI_MODEL", "gpt-5.4-mini"),
-    "gemini": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite-preview"),
-    "gemini_flash": os.getenv("GEMINI_FLASH_MODEL", "gemini-3.1-flash-preview"),
+    "gemini_flash_lite": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite-preview"),
+    "gemini_flash": os.getenv("GEMINI_FLASH_MODEL", "gemini-3-flash-preview"),
 }
 
 MODEL_DISPLAY = {
     "claude": "Claude Sonnet 4.6",
     "openai": "GPT-5.4 Mini",
-    "gemini": "Gemini 3.1 Flash-Lite Preview",
-    "gemini_flash": "Gemini 3.1 Flash Preview",
+    "gemini_flash_lite": "Gemini 3.1 Flash-Lite Preview",
+    "gemini_flash": "Gemini 3 Flash",
 }
 
 # ── Top-20 Languages ─────────────────────────────────────────────────────────
@@ -210,7 +210,7 @@ TOP_20_LANGUAGES = [
         "include": "Urdu",
         "blend": None,
         "indicgenbench": "ur",
-        "global_mmlu": "ur",
+        "global_mmlu": None,   # not available in CohereLabs/Global-MMLU dataset
         "milu": None,
     },
     {

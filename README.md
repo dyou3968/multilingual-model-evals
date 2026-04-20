@@ -8,10 +8,51 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **
 |-----|-------|-------|
 | `claude` | Claude Sonnet 4.6 | 89.3% |
 | `openai` | GPT-5.4 Mini | — |
-| `gemini` | Gemini 3.1 Flash-Lite Preview | 88.9% |
-| `gemini_flash` | Gemini 3.1 Flash Preview | — |
+| `gemini_flash_lite` | Gemini 3.1 Flash-Lite Preview | 88.9% |
+| `gemini_flash` | Gemini 3 Flash | — |
 
-`claude`, `openai`, and `gemini` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
+`claude`, `openai`, and `gemini_flash_lite` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
+
+## Results
+
+### Belebele (Reading Comprehension MCQ — 20 languages, 900 examples each)
+
+| Model | Overall Accuracy |
+|-------|-----------------|
+| Gemini 3.1 Flash-Lite Preview | **92.5%** (16,641 / 18,000) |
+| Claude Sonnet 4.6 | **87.7%** (15,791 / 18,000) |
+| GPT-5.4 Mini | *(in progress)* |
+
+**Per-language breakdown:**
+
+| Language | Code | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite |
+|----------|------|:-----------------:|:---------------------:|
+| English | eng_Latn | 96.0% | 96.6% |
+| Arabic | arb_Arab | 93.8% | 95.2% |
+| French | fra_Latn | 92.6% | 95.6% |
+| Portuguese | por_Latn | 92.6% | 94.6% |
+| German | deu_Latn | 92.3% | 95.3% |
+| Korean | kor_Hang | 91.9% | 92.8% |
+| Mandarin Chinese | zho_Hans | 91.7% | 94.1% |
+| Vietnamese | vie_Latn | 91.0% | 93.4% |
+| Indonesian | ind_Latn | 90.8% | 94.1% |
+| Russian | rus_Cyrl | 89.7% | 94.9% |
+| Spanish | spa_Latn | 89.7% | 94.2% |
+| Japanese | jpn_Jpan | 88.8% | 92.2% |
+| Turkish | tur_Latn | 88.2% | 92.8% |
+| Bengali | ben_Beng | 83.7% | 90.6% |
+| Punjabi | pan_Guru | 82.9% | 89.1% |
+| Marathi | mar_Deva | 80.7% | 90.9% |
+| Telugu | tel_Telu | 80.8% | 85.9% |
+| Urdu | urd_Arab | 80.2% | 90.9% |
+| Hindi | hin_Deva | 79.6% | 88.8% |
+| Tamil | tam_Taml | 77.9% | 87.1% |
+
+Full per-language results and methodology: [results/belebele/README.md](results/belebele/README.md)
+
+### Global MMLU & MILU
+
+Gemini 3.1 Flash-Lite results available; Claude, GPT-5.4 Mini, and Gemini 3 Flash in progress. See [results/](results/) for details as they complete.
 
 ## Project Structure
 
@@ -33,7 +74,7 @@ multilingual-model-evals/
 │   └── benchmarks/
 │       ├── base.py
 │       ├── belebele.py          # Reading comprehension MCQ (20 languages)
-│       ├── global_mmlu.py       # Knowledge MCQ — CohereLabs (16 languages)
+│       ├── global_mmlu.py       # Knowledge MCQ — CohereLabs (15 languages)
 │       └── milu.py              # Knowledge MCQ — Indic languages (7 languages, gated)
 ├── docs/
 │   └── architecture.md          # System architecture diagram
@@ -53,11 +94,11 @@ multilingual-model-evals/
 | Benchmark | Task | Languages | Examples/lang | Scoring | Auth |
 |-----------|------|-----------|---------------|---------|------|
 | [Belebele](https://huggingface.co/datasets/facebook/belebele) | Reading comprehension MCQ | 20/20 | 900 (full set) | Exact match | Public |
-| [Global MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU) | Knowledge MCQ (57 subjects) | 16/20 | 1,000 (capped) | Exact match | Public |
+| [Global MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU) | Knowledge MCQ (57 subjects) | 15/20 | 1,000 (capped) | Exact match | Public |
 | [MILU](https://huggingface.co/datasets/ai4bharat/MILU) | Knowledge MCQ — Indic languages | 7/20 | 1,000 (capped) | Exact match | Gated¹ |
 
 **Language coverage gaps:**
-- Global MMLU does not cover: Punjabi, Marathi, Telugu, Tamil
+- Global MMLU does not cover: Punjabi, Marathi, Tamil, Urdu (not in dataset)
 - MILU covers only Indic languages: English, Hindi, Bengali, Punjabi, Marathi, Telugu, Tamil
 
 ¹ MILU requires accepting terms at huggingface.co/datasets/ai4bharat/MILU and setting `HF_TOKEN` in `.env`.
@@ -75,7 +116,7 @@ Top 20 by global speakers: Mandarin Chinese, Spanish, English, Hindi, Arabic, Be
 ```bash
 python run_eval.py                                      # belebele, all 3 primary models
 python run_eval.py --benchmarks global_mmlu milu        # new benchmarks, all models
-python run_eval.py --models gemini_flash --benchmarks global_mmlu milu  # flash comparison
+python run_eval.py --models gemini_flash_lite_flash --benchmarks global_mmlu milu  # flash comparison
 ```
 
 ### Benchmark-specific
@@ -89,8 +130,8 @@ python run_eval.py --benchmarks milu                    # requires HF_TOKEN
 ### Model-specific
 
 ```bash
-python run_eval.py --models gemini
-python run_eval.py --models gemini_flash
+python run_eval.py --models gemini_flash_lite
+python run_eval.py --models gemini_flash_lite_flash
 python run_eval.py --models claude --models openai
 ```
 
@@ -132,7 +173,7 @@ Model IDs default to the values below. Override in `.env` to point at a differen
 CLAUDE_MODEL=claude-sonnet-4-6
 OPENAI_MODEL=gpt-5.4-mini
 GEMINI_MODEL=gemini-3.1-flash-lite-preview
-GEMINI_FLASH_MODEL=gemini-3.1-flash-preview
+GEMINI_FLASH_MODEL=gemini-3-flash-preview
 ```
 
 ### 3. Verify setup (optional smoke test)
@@ -203,7 +244,7 @@ All three benchmarks use MCQ exact-match scoring — no judge pass needed. MCQ o
 | Gemini 3.1 Flash-Lite Preview | ~$0.7 | ~$0.1 | **~$1** |
 | **All 3 models** | | | **~$30** |
 
-**Global MMLU** — 1,000 examples × 16 languages = 16,000 examples per model (similar token cost to Belebele, ~10% less volume).
+**Global MMLU** — 1,000 examples × 15 languages = 15,000 examples per model (Urdu excluded — not available in dataset).
 
 **MILU** — 1,000 examples × 7 languages = 7,000 examples per model (~40% of Belebele volume).
 

@@ -9,8 +9,8 @@ __pycache__/
 dist/
 build/
 
-# Results (large output files)
-results/
+# Results — raw JSONL output files (large, not tracked)
+results/**/*.jsonl
 
 # OS
 .DS_Store
