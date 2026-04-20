@@ -127,13 +127,13 @@ async def run_benchmark(
             benchmark_name, len(pending), model_key, len(completed)
         )
 
-        tasks = [_run_example(client, ex, sem) for ex in pending]
+        with open(out_path, "a") as fp:
+            writer = jsonlines.Writer(fp)
 
-        with jsonlines.open(out_path, mode="a") as writer:
-            for example, (prediction, scores) in zip(
-                pending,
-                await async_tqdm.gather(*tasks, desc=f"{benchmark_name}/{model_key}"),
-            ):
+            async def run_and_write(example: dict) -> None:
+                prediction, scores = await _run_example(client, example, sem)
+                if not prediction:
+                    return  # failed after all retries — skip, will be retried on next run
                 record = {
                     "id": example["id"],
                     "benchmark": benchmark_name,
@@ -144,9 +144,15 @@ async def run_benchmark(
                     **scores,
                 }
                 writer.write(record)
+                fp.flush()
 
                 if scores.get("needs_judge"):
                     judge_queue.append((prediction, model_key, example))
+
+            await async_tqdm.gather(
+                *[run_and_write(ex) for ex in pending],
+                desc=f"{benchmark_name}/{model_key}",
+            )
 
     # Run multi-judge consensus on flagged examples
     if judge_queue:
