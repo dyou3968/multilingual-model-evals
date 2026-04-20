@@ -11,7 +11,48 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **
 | `gemini_flash_lite` | Gemini 3.1 Flash-Lite Preview | 88.9% |
 | `gemini_flash` | Gemini 3 Flash | — |
 
-`claude`, `openai`, and `gemini` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
+`claude`, `openai`, and `gemini_flash_lite` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
+
+## Results
+
+### Belebele (Reading Comprehension MCQ — 20 languages, 900 examples each)
+
+| Model | Overall Accuracy |
+|-------|-----------------|
+| Gemini 3.1 Flash-Lite Preview | **92.5%** (16,641 / 18,000) |
+| Claude Sonnet 4.6 | **87.7%** (15,791 / 18,000) |
+| GPT-5.4 Mini | *(in progress)* |
+
+**Per-language breakdown:**
+
+| Language | Code | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite |
+|----------|------|:-----------------:|:---------------------:|
+| English | eng_Latn | 96.0% | 96.6% |
+| Arabic | arb_Arab | 93.8% | 95.2% |
+| French | fra_Latn | 92.6% | 95.6% |
+| Portuguese | por_Latn | 92.6% | 94.6% |
+| German | deu_Latn | 92.3% | 95.3% |
+| Korean | kor_Hang | 91.9% | 92.8% |
+| Mandarin Chinese | zho_Hans | 91.7% | 94.1% |
+| Vietnamese | vie_Latn | 91.0% | 93.4% |
+| Indonesian | ind_Latn | 90.8% | 94.1% |
+| Russian | rus_Cyrl | 89.7% | 94.9% |
+| Spanish | spa_Latn | 89.7% | 94.2% |
+| Japanese | jpn_Jpan | 88.8% | 92.2% |
+| Turkish | tur_Latn | 88.2% | 92.8% |
+| Bengali | ben_Beng | 83.7% | 90.6% |
+| Punjabi | pan_Guru | 82.9% | 89.1% |
+| Marathi | mar_Deva | 80.7% | 90.9% |
+| Telugu | tel_Telu | 80.8% | 85.9% |
+| Urdu | urd_Arab | 80.2% | 90.9% |
+| Hindi | hin_Deva | 79.6% | 88.8% |
+| Tamil | tam_Taml | 77.9% | 87.1% |
+
+Full per-language results and methodology: [results/belebele/README.md](results/belebele/README.md)
+
+### Global MMLU & MILU
+
+Gemini 3.1 Flash-Lite results available; Claude, GPT-5.4 Mini, and Gemini 3 Flash in progress. See [results/](results/) for details as they complete.
 
 ## Project Structure
 
