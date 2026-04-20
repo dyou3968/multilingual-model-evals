@@ -17,7 +17,7 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, **Gemi
 
 ### MILU (Knowledge MCQ — Indic languages, 7 languages, 1,000 examples each)
 
-Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash complete; Claude Sonnet 4.6 in progress. System card results for Claude and Gemini 3 Pro included for context (reasoning-enabled, 11 languages) — methodology differs, see [results/milu/README.md](results/milu/README.md).
+Our harness run: 0-shot, Claude Sonnet 4.6, Gemini 3.1 Flash-Lite, and Gemini 3 Flash complete. System card results for Claude and Gemini 3 Pro included for context (reasoning-enabled, 11 languages) — methodology differs, see [results/milu/README.md](results/milu/README.md).
 
 | Model | Average Accuracy | Languages | Notes |
 |-------|-----------------|-----------|-------|
@@ -27,19 +27,20 @@ Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash complete; Clau
 | GPT-5.2 Pro | **89.2%** | 11 | System card, reasoning enabled |
 | Claude Sonnet 4.5 | **87.6%** | 11 | System card, reasoning enabled |
 | Gemini 3 Flash | **87.6%** | 7 | Our harness, 0-shot |
+| Claude Sonnet 4.6 | **86.3%** | 7 | Our harness, 0-shot |
 | Gemini 3.1 Flash-Lite | **85.2%** | 7 | Our harness, 0-shot |
 
 **Per-language breakdown (our harness):**
 
-| Language | Gemini 3.1 Flash-Lite | Gemini 3 Flash |
-|----------|:---------------------:|:--------------:|
-| Bengali | 88.8% | **90.8%** |
-| Marathi | 88.7% | **89.8%** |
-| Tamil | 84.1% | **88.7%** |
-| Hindi | 83.7% | **87.1%** |
-| Telugu | 84.7% | **86.8%** |
-| English | 86.2% | 84.9% |
-| Punjabi | 80.0% | 84.9% |
+| Language | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite | Gemini 3 Flash |
+|----------|:-----------------:|:---------------------:|:--------------:|
+| Bengali | **89.6%** | 88.8% | **90.8%** |
+| Marathi | **89.6%** | 88.7% | **89.8%** |
+| Hindi | **87.8%** | 83.7% | **87.1%** |
+| English | **87.5%** | 86.2% | 84.9% |
+| Telugu | **85.8%** | 84.7% | **86.8%** |
+| Tamil | 83.3% | 84.1% | **88.7%** |
+| Punjabi | **80.3%** | 80.0% | 84.9% |
 
 Full results and system card comparison: [results/milu/README.md](results/milu/README.md)
 
