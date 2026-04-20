@@ -88,7 +88,7 @@ Full results, resource-tier breakdown, and system card comparison: [results/glob
 
 ### MILU (Knowledge MCQ — Indic languages, 7 languages, 1,000 examples each)
 
-Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash. System card results for Claude and Gemini 3 Pro included for context (reasoning-enabled, 11 languages) — methodology differs, see [results/milu/README.md](results/milu/README.md).
+Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash complete; Claude Sonnet 4.6 in progress. System card results for Claude and Gemini 3 Pro included for context (reasoning-enabled, 11 languages) — methodology differs, see [results/milu/README.md](results/milu/README.md).
 
 | Model | Average Accuracy | Languages | Notes |
 |-------|-----------------|-----------|-------|
@@ -97,19 +97,20 @@ Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash. System card r
 | Claude Opus 4.6 | **89.6%** | 11 | System card, reasoning enabled |
 | GPT-5.2 Pro | **89.2%** | 11 | System card, reasoning enabled |
 | Claude Sonnet 4.5 | **87.6%** | 11 | System card, reasoning enabled |
+| Gemini 3 Flash | **87.6%** | 7 | Our harness, 0-shot |
 | Gemini 3.1 Flash-Lite | **85.2%** | 7 | Our harness, 0-shot |
-| Gemini 3 Flash | *(scheduled)* | 7 | Our harness, 0-shot |
 
 **Per-language breakdown (our harness):**
 
 | Language | Gemini 3.1 Flash-Lite | Gemini 3 Flash |
 |----------|:---------------------:|:--------------:|
-| Bengali | 88.8% | *(scheduled)* |
-| Marathi | 88.7% | *(scheduled)* |
-| English | 86.2% | *(scheduled)* |
-| Telugu | 84.7% | *(scheduled)* |
-| Tamil | 84.1% | *(scheduled)* |
-| Hindi | 83.7% | *(scheduled)* |
+| Bengali | 88.8% | **90.8%** |
+| Marathi | 88.7% | **89.8%** |
+| Tamil | 84.1% | **88.7%** |
+| Hindi | 83.7% | **87.1%** |
+| Telugu | 84.7% | **86.8%** |
+| English | 86.2% | 84.9% |
+| Punjabi | 80.0% | 84.9% |
 | Punjabi | 80.0% | *(scheduled)* |
 
 Full results and system card comparison: [results/milu/README.md](results/milu/README.md)

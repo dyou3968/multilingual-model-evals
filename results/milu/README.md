@@ -6,20 +6,20 @@ Scoring: exact match on A/B/C/D response letter.
 
 ---
 
-## Our Harness Run — Gemini 3.1 Flash-Lite Preview (0-shot)
+## Our Harness Run — 0-shot
 
 7 of the top-20 target languages covered by MILU (English, Hindi, Bengali, Punjabi, Marathi, Telugu, Tamil).
 
-| Language | Gemini 3.1 Flash-Lite |
-|----------|:---------------------:|
-| Bengali | 88.8% |
-| Marathi | 88.7% |
-| English | 86.2% |
-| Telugu | 84.7% |
-| Tamil | 84.1% |
-| Hindi | 83.7% |
-| Punjabi | 80.0% |
-| **Overall (7 langs)** | **85.2%** (5,962 / 7,000) |
+| Language | Gemini 3.1 Flash-Lite | Gemini 3 Flash |
+|----------|:---------------------:|:--------------:|
+| Bengali | 88.8% | **90.8%** |
+| Marathi | 88.7% | **89.8%** |
+| Tamil | 84.1% | **88.7%** |
+| Hindi | 83.7% | **87.1%** |
+| Telugu | 84.7% | **86.8%** |
+| English | 86.2% | 84.9% |
+| Punjabi | 80.0% | 84.9% |
+| **Overall (7 langs)** | **85.2%** (5,962 / 7,000) | **87.6%** (6,999 / 7,000) |
 
 ---
 
@@ -53,6 +53,8 @@ Evaluated on ai4bharat/MILU across 11 languages (10 Indic + English) with reason
 - **Claude Sonnet 4.6 and Opus 4.6 are tied** on MILU average (both 89.6%), with Opus slightly ahead on individual languages.
 - **Hindi is notably strong for Claude Sonnet 4.6** (+1.1% above its own English score), one of the few languages where a non-English score exceeds English.
 - **Our harness 0-shot scores are lower** than the system card reasoning scores by ~4–8pp — the gap is expected given 0-shot vs. thinking-enabled inference.
+- **Gemini 3 Flash outperforms Flash-Lite by +2.4pp** overall in our harness (87.6% vs. 85.2%), with larger gains on Indic scripts (Bengali +2.0pp, Tamil +4.6pp, Marathi +1.1pp).
+- **English is the weakest language for Gemini 3 Flash** in our harness (84.9%), below its Indic language scores — likely a prompt-format sensitivity rather than a true capability gap.
 
 ---
 
