@@ -9,7 +9,7 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, **Gemi
 | `claude` | Claude Sonnet 4.6 | 89.3% |
 | `openai` | GPT-5.4 Mini | — |
 | `gemini_flash_lite` | Gemini 3.1 Flash-Lite Preview | 88.9% |
-| `gemini_flash` | Gemini 3 Flash | — |
+| `gemini_flash` | Gemini 3 Flash | 91.8% |
 
 `claude`, `openai`, and `gemini_flash_lite` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
 
