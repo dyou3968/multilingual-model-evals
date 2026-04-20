@@ -20,39 +20,61 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **
 | Model | Overall Accuracy |
 |-------|-----------------|
 | Gemini 3.1 Flash-Lite Preview | **92.5%** (16,641 / 18,000) |
+| GPT-5.4 Mini | **89.5%** (16,103 / 18,000) |
 | Claude Sonnet 4.6 | **87.7%** (15,791 / 18,000) |
-| GPT-5.4 Mini | *(in progress)* |
 
 **Per-language breakdown:**
 
-| Language | Code | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite |
-|----------|------|:-----------------:|:---------------------:|
-| English | eng_Latn | 96.0% | 96.6% |
-| Arabic | arb_Arab | 93.8% | 95.2% |
-| French | fra_Latn | 92.6% | 95.6% |
-| Portuguese | por_Latn | 92.6% | 94.6% |
-| German | deu_Latn | 92.3% | 95.3% |
-| Korean | kor_Hang | 91.9% | 92.8% |
-| Mandarin Chinese | zho_Hans | 91.7% | 94.1% |
-| Vietnamese | vie_Latn | 91.0% | 93.4% |
-| Indonesian | ind_Latn | 90.8% | 94.1% |
-| Russian | rus_Cyrl | 89.7% | 94.9% |
-| Spanish | spa_Latn | 89.7% | 94.2% |
-| Japanese | jpn_Jpan | 88.8% | 92.2% |
-| Turkish | tur_Latn | 88.2% | 92.8% |
-| Bengali | ben_Beng | 83.7% | 90.6% |
-| Punjabi | pan_Guru | 82.9% | 89.1% |
-| Marathi | mar_Deva | 80.7% | 90.9% |
-| Telugu | tel_Telu | 80.8% | 85.9% |
-| Urdu | urd_Arab | 80.2% | 90.9% |
-| Hindi | hin_Deva | 79.6% | 88.8% |
-| Tamil | tam_Taml | 77.9% | 87.1% |
+| Language | Code | Claude Sonnet 4.6 | GPT-5.4 Mini | Gemini 3.1 Flash-Lite |
+|----------|------|:-----------------:|:------------:|:---------------------:|
+| English | eng_Latn | 96.0% | 95.1% | 96.6% |
+| Arabic | arb_Arab | 93.8% | 91.4% | 95.2% |
+| French | fra_Latn | 92.6% | 93.4% | 95.6% |
+| Portuguese | por_Latn | 92.6% | 92.1% | 94.6% |
+| German | deu_Latn | 92.3% | 93.1% | 95.3% |
+| Korean | kor_Hang | 91.9% | 91.1% | 92.8% |
+| Mandarin Chinese | zho_Hans | 91.7% | 92.3% | 94.1% |
+| Vietnamese | vie_Latn | 91.0% | 90.7% | 93.4% |
+| Indonesian | ind_Latn | 90.8% | 89.9% | 94.1% |
+| Russian | rus_Cyrl | 89.7% | 92.9% | 94.9% |
+| Spanish | spa_Latn | 89.7% | 91.7% | 94.2% |
+| Japanese | jpn_Jpan | 88.8% | 89.2% | 92.2% |
+| Turkish | tur_Latn | 88.2% | 88.8% | 92.8% |
+| Bengali | ben_Beng | 83.7% | 86.6% | 90.6% |
+| Punjabi | pan_Guru | 82.9% | 86.4% | 89.1% |
+| Marathi | mar_Deva | 80.7% | 86.8% | 90.9% |
+| Telugu | tel_Telu | 80.8% | 82.8% | 85.9% |
+| Urdu | urd_Arab | 80.2% | 86.0% | 90.9% |
+| Hindi | hin_Deva | 79.6% | 84.6% | 88.8% |
+| Tamil | tam_Taml | 77.9% | 84.3% | 87.1% |
 
 Full per-language results and methodology: [results/belebele/README.md](results/belebele/README.md)
 
-### Global MMLU & MILU
+### Global MMLU (Knowledge MCQ — 15 languages, 1,000 examples each)
 
-Gemini 3.1 Flash-Lite results available; Claude, GPT-5.4 Mini, and Gemini 3 Flash in progress. See [results/](results/) for details as they complete.
+Our harness run (0-shot, Gemini 3.1 Flash-Lite only). System card results for Claude and Gemini 3 Pro included for context — see [results/global_mmlu/README.md](results/global_mmlu/README.md) for methodology notes.
+
+| Model | Overall Accuracy | Notes |
+|-------|-----------------|-------|
+| Gemini 3 Pro | **91.8%** | System card — 42 langs, reasoning enabled |
+| Claude Opus 4.6 | **90.1%** | System card — 42 langs, reasoning enabled |
+| GPT-5.2 Pro | **90.1%** | System card — 42 langs, reasoning enabled |
+| Claude Sonnet 4.6 | **88.7%** | System card — 42 langs, reasoning enabled |
+| Claude Sonnet 4.5 | **87.9%** | System card — 42 langs, reasoning enabled |
+| Gemini 3.1 Flash-Lite | **85.8%** | Our harness — 15 langs, 0-shot |
+
+### MILU (Knowledge MCQ — Indic languages)
+
+Our harness run (0-shot, Gemini 3.1 Flash-Lite, 7 languages). System card results for Claude and Gemini 3 Pro included for context — see [results/milu/README.md](results/milu/README.md) for methodology notes.
+
+| Model | Average Accuracy | Languages | Notes |
+|-------|-----------------|-----------|-------|
+| Gemini 3 Pro | **93.2%** | 11 (10 Indic + English) | System card, reasoning enabled |
+| Claude Sonnet 4.6 | **89.6%** | 11 | System card, reasoning enabled |
+| Claude Opus 4.6 | **89.6%** | 11 | System card, reasoning enabled |
+| GPT-5.2 Pro | **89.2%** | 11 | System card, reasoning enabled |
+| Claude Sonnet 4.5 | **87.6%** | 11 | System card, reasoning enabled |
+| Gemini 3.1 Flash-Lite | **85.2%** | 7 | Our harness, 0-shot |
 
 ## Project Structure
 
