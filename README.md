@@ -8,8 +8,8 @@ A benchmarking harness comparing **Claude Sonnet 4.6**, **GPT-5.4 Mini**, and **
 |-----|-------|-------|
 | `claude` | Claude Sonnet 4.6 | 89.3% |
 | `openai` | GPT-5.4 Mini | — |
-| `gemini` | Gemini 3.1 Flash-Lite Preview | 88.9% |
-| `gemini_flash` | Gemini 3.1 Flash Preview | — |
+| `gemini_flash_lite` | Gemini 3.1 Flash-Lite Preview | 88.9% |
+| `gemini_flash` | Gemini 3 Flash | — |
 
 `claude`, `openai`, and `gemini` are the primary comparison set. `gemini_flash` is the non-lite Gemini model, included for intra-family comparison on the MMLU-style benchmarks. All model IDs are overridable via `.env`.
 
@@ -75,7 +75,7 @@ Top 20 by global speakers: Mandarin Chinese, Spanish, English, Hindi, Arabic, Be
 ```bash
 python run_eval.py                                      # belebele, all 3 primary models
 python run_eval.py --benchmarks global_mmlu milu        # new benchmarks, all models
-python run_eval.py --models gemini_flash --benchmarks global_mmlu milu  # flash comparison
+python run_eval.py --models gemini_flash_lite_flash --benchmarks global_mmlu milu  # flash comparison
 ```
 
 ### Benchmark-specific
@@ -89,8 +89,8 @@ python run_eval.py --benchmarks milu                    # requires HF_TOKEN
 ### Model-specific
 
 ```bash
-python run_eval.py --models gemini
-python run_eval.py --models gemini_flash
+python run_eval.py --models gemini_flash_lite
+python run_eval.py --models gemini_flash_lite_flash
 python run_eval.py --models claude --models openai
 ```
 
@@ -132,7 +132,7 @@ Model IDs default to the values below. Override in `.env` to point at a differen
 CLAUDE_MODEL=claude-sonnet-4-6
 OPENAI_MODEL=gpt-5.4-mini
 GEMINI_MODEL=gemini-3.1-flash-lite-preview
-GEMINI_FLASH_MODEL=gemini-3.1-flash-preview
+GEMINI_FLASH_MODEL=gemini-3-flash-preview
 ```
 
 ### 3. Verify setup (optional smoke test)
