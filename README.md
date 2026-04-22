@@ -56,28 +56,28 @@ Our harness run: 0-shot, Gemini 3.1 Flash-Lite and Gemini 3 Flash. System card r
 | Claude Sonnet 4.6 | **88.7%** | System card — 42 langs, reasoning enabled |
 | Claude Sonnet 4.5 | **87.9%** | System card — 42 langs, reasoning enabled |
 | Claude Sonnet 4.6 | **88.6%** | Our harness — 15 langs, 0-shot |
+| Gemini 3 Flash | **86.5%** | Our harness — 15 langs, 0-shot |
 | Gemini 3.1 Flash-Lite | **85.8%** | Our harness — 15 langs, 0-shot |
-| Gemini 3 Flash | *(in progress)* | Our harness — 15 langs, 0-shot |
 
 **Per-language breakdown (our harness):**
 
-| Language | Code | Claude Sonnet 4.6 | Gemini 3.1 Flash-Lite |
-|----------|------|:-----------------:|:---------------------:|
-| English | en | **91.5%** | 88.0% |
-| Russian | ru | **90.6%** | 86.7% |
-| German | de | **90.3%** | 87.2% |
-| Portuguese | pt | **90.0%** | 86.8% |
-| Spanish | es | **89.8%** | 86.9% |
-| Indonesian | id | **89.2%** | 85.5% |
-| Turkish | tr | **89.0%** | 85.4% |
-| Mandarin Chinese | zh | **88.6%** | 85.8% |
-| French | fr | **88.1%** | 85.7% |
-| Vietnamese | vi | **88.1%** | 84.9% |
-| Japanese | ja | **88.0%** | 86.0% |
-| Hindi | hi | **87.8%** | 85.9% |
-| Korean | ko | **87.2%** | 83.1% |
-| Arabic | ar | **85.4%** | 85.3% |
-| Bengali | bn | **85.1%** | 83.3% |
+| Language | Code | Claude Sonnet 4.6 | Gemini 3 Flash | Gemini 3.1 Flash-Lite |
+|----------|------|:-----------------:|:--------------:|:---------------------:|
+| English | en | **91.5%** | 85.3% | 88.0% |
+| Russian | ru | **90.6%** | 87.3% | 86.7% |
+| German | de | **90.3%** | 85.6% | 87.2% |
+| Portuguese | pt | **90.0%** | 87.5% | 86.8% |
+| Spanish | es | **89.8%** | 87.5% | 86.9% |
+| Indonesian | id | **89.2%** | 88.0% | 85.5% |
+| Turkish | tr | **89.0%** | 86.5% | 85.4% |
+| Mandarin Chinese | zh | **88.6%** | 85.2% | 85.8% |
+| French | fr | **88.1%** | 86.6% | 85.7% |
+| Vietnamese | vi | **88.1%** | 86.8% | 84.9% |
+| Japanese | ja | **88.0%** | 86.2% | 86.0% |
+| Hindi | hi | **87.8%** | 86.9% | 85.9% |
+| Korean | ko | **87.2%** | 85.5% | 83.1% |
+| Arabic | ar | **85.4%** | **87.7%** | 85.3% |
+| Bengali | bn | **85.1%** | 85.1% | 83.3% |
 
 Full results, resource-tier breakdown, and system card comparison: [results/global_mmlu/README.md](results/global_mmlu/README.md)
 
